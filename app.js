@@ -29,6 +29,7 @@ app.use(expressValidator({
 app.use(authenticator.authenticate());
 
 app.use('/users', routes.users);
+app.use('/messages', routes.messages);
 app.use(errorHandler());
 
 
