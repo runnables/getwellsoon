@@ -299,7 +299,7 @@ $(document).ready(function(){
         showLightbox();
         $('.btn-participate').removeClass('disabled');
         $('.btn-participate').html(text);
-        $('input-name').val(data.user.name.split(' ')[0]);
+        $('.input-name').val(data.user.name.split(' ')[0]);
       });
     };
 
@@ -337,6 +337,20 @@ $(document).ready(function(){
   });
 
   $('.btn-post').click(function(){
+    if (!$('.input-name').val()) {
+      $('.input-name').siblings('label').addClass('required');
+      return;
+    } else {
+      $('.input-name').siblings('label').removeClass('required');
+    }
+
+    if (!$('.input-message').val()) {
+      $('.input-message').siblings('label').addClass('required');
+      return;
+    } else {
+      $('.input-message').siblings('label').removeClass('required');
+    }
+
     getWellSoonService.sendMessage(
       {
         'title': $('.input-name').val(),
