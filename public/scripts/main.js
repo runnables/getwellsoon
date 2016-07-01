@@ -299,6 +299,7 @@ $(document).ready(function(){
         showLightbox();
         $('.btn-participate').removeClass('disabled');
         $('.btn-participate').html(text);
+        $('input-name').val(data.user.name.split(' ')[0]);
       });
     };
 
