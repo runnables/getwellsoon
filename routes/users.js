@@ -11,8 +11,8 @@ const router = new Router();
 
 const getFacebookProfile = accessToken => (
   request
-    .get(`${facebookBaseUrl}/me?access_token=${accessToken}&fields=name,email,picture.width(200)`)
-    .set('Accept', 'application/json')
+  .get(`${facebookBaseUrl}/me?access_token=${accessToken}&fields=name,email,picture.width(200)`)
+  .set('Accept', 'application/json')
 );
 
 const generateToken = () => {
@@ -82,7 +82,7 @@ router.get('/me', (req, res) => {
   if (req.currentUser) {
     return res.status(200).send(req.currentUser);
   }
-  return res.status(403).send({message: 'Forbidden'});
+  return res.status(403).send({ message: 'Forbidden' });
 });
 
 router.post('/login', loginWithFacebook);
