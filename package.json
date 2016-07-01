@@ -10,7 +10,6 @@
     "build": "lessc --clean-css ./public/main.less ./public/main.min.css"
   },
   "dependencies": {
-    "bcrypt": "^0.8.7",
     "bluebird": "^3.4.1",
     "body-parser": "^1.15.1",
     "config": "^1.21.0",
