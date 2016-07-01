@@ -239,7 +239,7 @@ $(document).ready(function(){
   //   reader.readAsDataURL(inputFile);
   // };
 
-  function getImage(inputFile, callback) {
+  function getImage(file, callback) {
     return new Promise(resolve => {
       file.reader = new FileReader();
       file.reader.readAsDataURL(file);
