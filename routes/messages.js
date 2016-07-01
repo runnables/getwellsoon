@@ -41,7 +41,7 @@ router.get('/', (req, res) => {
 
 router.post('/', (req, res) => {
   if (req.currentUser) {
-    req.checkBody('image', 'Invalid Image').optional().isBase64();
+    // req.checkBody('image', 'Invalid Image').optional().isBase64();
     req.checkBody('title', 'Title us required').notEmpty();
     req.checkBody('detail', 'detail is required').notEmpty();
     req.checkBody('affiliation', 'affiliation is required').optional();
@@ -64,9 +64,8 @@ router.post('/', (req, res) => {
       user: req.currentUser._id,
     });
 
-    const dir = path.join(global.basePath, 'media', 'messages');
+    const dir = path.join(global.basePath, 'public', 'media', 'messages');
     const coverImagePath = path.join(dir, `${message._id}.jpg`);
-
 
     if (req.body.image) {
       const imageData = req.body.image.split(';base64');
