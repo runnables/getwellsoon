@@ -40,7 +40,7 @@ router.get('/', (req, res) => {
 });
 
 router.post('/', (req, res) => {
-  req.checkBody('image', 'Invalid Image').notEmpty().isBase64();
+  req.checkBody('image', 'Invalid Image').optional().isBase64();
   req.checkBody('title', 'Title us required').notEmpty();
   req.checkBody('detail', 'detail is required').notEmpty();
   req.checkBody('affiliation', 'affiliation is required').optional();
