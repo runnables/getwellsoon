@@ -10,21 +10,22 @@ const fs = Promise.promisifyAll(require('fs'));
 
 const router = new Router();
 
-router.get('/', (req, res) => {
-
-  Message.find({ _id: { "$lt": req.query.lastId } })
+router.get('/', (req, res) => (
+  Message.find({ _id: { $lt: req.query.lastId } })
     .limit(30)
     .populate('user')
-    .sort({ "_id": -1 })
-    .exec(function(err, messages) {
+    .sort({ _id: -1 })
+    .exec((err, messages) => {
       if (err) {
         res.status(500).send({ error: err });
       } else {
-        res.status(200).send(messages);
+        res.status(200).send({
+          messages,
+          next: messages[messages.length - 1]._id,
+        });
       }
-    });
-
-});
+    })
+));
 
 router.post('/', (req, res) => {
   req.checkBody('image', 'Invalid Image').notEmpty().isBase64();
@@ -51,7 +52,7 @@ router.post('/', (req, res) => {
   const dir = path.join(global.basePath, 'media', 'messages');
   const coverImagePath = path.join(dir, `${message._id}.jpg`);
 
-  fs.writeFileAsync(coverImagePath, req.body.image, 'base64')
+  return fs.writeFileAsync(coverImagePath, req.body.image, 'base64')
     .then(() => {
       message.imagePath = `/media/messages/${message._id}.jpg`;
       return message.save();
