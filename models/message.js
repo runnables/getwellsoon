@@ -9,7 +9,7 @@ const schema = new mongoose.Schema({
   createdAt: { type: Date, default: Date.now },
   title: { type: String },
   detail: { type: String },
-  image: { type: String },
+  imagePath: { type: String },
 });
 
 schema.index({ _id: 1 });
