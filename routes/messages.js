@@ -40,52 +40,57 @@ router.get('/', (req, res) => {
 });
 
 router.post('/', (req, res) => {
-  req.checkBody('image', 'Invalid Image').optional().isBase64();
-  req.checkBody('title', 'Title us required').notEmpty();
-  req.checkBody('detail', 'detail is required').notEmpty();
-  req.checkBody('affiliation', 'affiliation is required').optional();
+  if (req.currentUser) {
+    req.checkBody('image', 'Invalid Image').optional().isBase64();
+    req.checkBody('title', 'Title us required').notEmpty();
+    req.checkBody('detail', 'detail is required').notEmpty();
+    req.checkBody('affiliation', 'affiliation is required').optional();
 
-  req.sanitizeBody('title').toString();
-  req.sanitizeBody('detail').toString();
-  const errors = req.validationErrors();
+    req.sanitizeBody('title').toString();
+    req.sanitizeBody('detail').toString();
+    const errors = req.validationErrors();
 
-  if (errors) {
-    return res.status(400).send({
-      message: 'There have been validation errors',
-      errors,
+    if (errors) {
+      return res.status(400).send({
+        message: 'There have been validation errors',
+        errors,
+      });
+    }
+
+    const message = new Message({
+      title: req.body.title,
+      detail: req.body.detail,
+      affiliation: req.body.affiliation,
+      user: req.currentUser._id,
     });
-  }
 
-  const message = new Message({
-    title: req.body.title,
-    detail: req.body.detail,
-    affiliation: req.body.affiliation,
-  });
-
-  const dir = path.join(global.basePath, 'media', 'messages');
-  const coverImagePath = path.join(dir, `${message._id}.jpg`);
+    const dir = path.join(global.basePath, 'media', 'messages');
+    const coverImagePath = path.join(dir, `${message._id}.jpg`);
 
 
-  if (req.body.image) {
-    return fs.writeFileAsync(coverImagePath, req.body.image, 'base64')
-      .then(() => {
-        message.imagePath = `/media/messages/${message._id}.jpg`;
-        return message.save();
-      })
+    if (req.body.image) {
+      return fs.writeFileAsync(coverImagePath, req.body.image, 'base64')
+        .then(() => {
+          message.imagePath = `/media/messages/${message._id}.jpg`;
+          return message.save();
+        })
+        .then(() => (
+          res.status(200).send(message)
+        ))
+        .catch(err => {
+          res.status(500).send(err);
+        });
+    }
+    return message.save()
       .then(() => (
         res.status(200).send(message)
       ))
       .catch(err => {
         res.status(500).send(err);
       });
-  }
-  return message.save()
-    .then(() => (
-      res.status(200).send(message)
-    ))
-    .catch(err => {
-      res.status(500).send(err);
-    });
+    } else {
+      res.status(403).send({message: 'Forbidden'});
+    }
 });
 
 module.exports = router;
