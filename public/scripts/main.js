@@ -1,5 +1,5 @@
 $(document).ready(function(){
-  
+
   var container, stats;
   var camera, scene, renderer;
   var raycaster;
@@ -79,7 +79,7 @@ $(document).ready(function(){
     renderer.setSize( window.innerWidth, window.innerHeight );
     container.appendChild( renderer.domElement );
     stats = new Stats();
-    container.appendChild( stats.dom );
+    //container.appendChild( stats.dom );
     document.addEventListener( 'mousemove', onDocumentMouseMove, false );
     //
     window.addEventListener( 'resize', onWindowResize, false );
