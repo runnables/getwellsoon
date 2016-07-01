@@ -50,7 +50,7 @@ router.post('/', (req, res) => {
     req.sanitizeBody('detail').toString();
     const errors = req.validationErrors();
 
-    if (errors) {
+    if (errors) {n
       return res.status(400).send({
         message: 'There have been validation errors',
         errors,
@@ -69,8 +69,9 @@ router.post('/', (req, res) => {
 
 
     if (req.body.image) {
-      console.log('has image');
-      return fs.writeFileAsync(coverImagePath, req.body.image, 'base64')
+      const imageData = req.body.image.split(';base64');
+      const base64String = imageData[1];
+      return fs.writeFileAsync(coverImagePath, base64String, 'base64')
         .then(() => {
           message.imagePath = `/media/messages/${message._id}.jpg`;
           return message.save();
