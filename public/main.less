@@ -1,10 +1,26 @@
+@breakpointXS: 480px;
+@breakpointS: 768px;
+@breakpointM: 992px;
+@breakpointL: 1200px;
+
 body { margin: 0; padding: 0; background-color: #eee; }
 .container {
-  max-width: 1080px;
+  max-width: @breakpointL;
   margin: 0 auto;
+}
+.hero {
+  width: 100vw;
+  height: 100vh;
+  line-height: 100vh;
+  text-align: center;
+  background-color: #fff;
 }
 .grid-item {
   width: 25%;
+  @media(max-width: @breakpointL) { width: 33%; }
+  @media(max-width: @breakpointS) { width: 50%; }
+  @media(max-width: @breakpointXS) { width: 100%; }
+
   .card {
     margin: 5px;
     -webkit-border-radius: 6px;
