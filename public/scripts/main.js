@@ -315,7 +315,7 @@ $(document).ready(function(){
           fbLoggedIn = false;
           fbAccessToken = undefined;
         }
-      },{scope: 'public_profile,email'});
+      },{ scope: 'public_profile' });
     }
    });
 
