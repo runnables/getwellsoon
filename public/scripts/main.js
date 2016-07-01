@@ -1,5 +1,5 @@
 $(document).ready(function(){
-  
+
   var container, stats;
   var camera, scene, renderer;
   var raycaster;
@@ -35,9 +35,9 @@ $(document).ready(function(){
     camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 1, 10000 );
     camera.position.set( 0, 300, 500 );
     scene = new THREE.Scene();
-    
+
     var textureLoader = new THREE.TextureLoader();
-    
+
 
     $.ajax({
       url: 'http://api.randomuser.me/?inc=name,picture&results=1000',
@@ -56,7 +56,7 @@ $(document).ready(function(){
       }
     });
 
-    
+
     /*
     for ( var i = 0; i < 100; i ++ ) {
       // var particle = new THREE.Sprite( new THREE.SpriteCanvasMaterial( { color: Math.random() * 0x808080 + 0x808080, program: programStroke } ) );
@@ -69,7 +69,7 @@ $(document).ready(function(){
       scene.add( particle );
     }
     */
-    
+
     //
     raycaster = new THREE.Raycaster();
     mouse = new THREE.Vector2();
@@ -79,7 +79,7 @@ $(document).ready(function(){
     renderer.setSize( window.innerWidth, window.innerHeight );
     container.appendChild( renderer.domElement );
     stats = new Stats();
-    container.appendChild( stats.dom );
+    //container.appendChild( stats.dom );
     document.addEventListener( 'mousemove', onDocumentMouseMove, false );
     //
     window.addEventListener( 'resize', onWindowResize, false );

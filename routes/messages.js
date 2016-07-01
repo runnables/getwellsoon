@@ -1,3 +1,5 @@
+'use strict';
+
 // const request = require('superagent');
 const Router = require('express').Router;
 const Message = require('../models/message');

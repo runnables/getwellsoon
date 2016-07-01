@@ -5,6 +5,7 @@
   <meta charset="UTF-8"/>
   <title>ร่วมส่งคำอวยพรให้พี่พเยาว์</title>
   <head>
+    <link href="https://fonts.googleapis.com/css?family=Mitr:400,500&subset=thai" rel="stylesheet"></link>
     <link rel="stylesheet" type="text/css" href="/main.min.css"></link>
     <script src="https://npmcdn.com/masonry-layout@4.1/dist/masonry.pkgd.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
@@ -15,9 +16,17 @@
     <script src="/scripts/main.js"></script>
   </head>
   <body>
-    <div id="threejs">
+    <div class="btn btn-primary btn-participate">ร่วมส่งกำลังใจ</div>
+    <div id="threejs" class="hero">
+      <div class="hero-overlay">
+        <div class="hero-text">
+          <h2><div>ศิษย์เก่า CP</div><div>ขอร่วมส่งกำลังใจให้</div></h2>
+          <h1><div>พี่พเยาว์</div><div>:))</div></h1>
+        </div>
+      </div>
     </div>
     <section id="cards">
+      <div class="cards-header">จากใจศิษย์เก่า</div>
       <div class="container" data-masonry='{ "itemSelector": ".grid-item" }'>
         <div class="grid">
           <% for(var i = 0; i < 100; i++) { %>
