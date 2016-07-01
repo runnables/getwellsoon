@@ -50,7 +50,7 @@ router.post('/', (req, res) => {
     req.sanitizeBody('detail').toString();
     const errors = req.validationErrors();
 
-    if (errors) {n
+    if (errors) {
       return res.status(400).send({
         message: 'There have been validation errors',
         errors,
