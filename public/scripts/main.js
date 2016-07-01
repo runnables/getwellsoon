@@ -21,24 +21,15 @@ $(document).ready(function(){
   };
   var INTERSECTED;
   function init() {
-    // container = document.createElement( 'div' );
-    // document.body.appendChild( container );
+
     var container = document.getElementById('threejs');
     console.log(container);
 
-    // var info = document.createElement( 'div' );
-    // info.style.position = 'absolute';
-    // info.style.top = '10px';
-    // info.style.width = '100%';
-    // info.style.textAlign = 'center';
-    // info.innerHTML = '<a href="http://threejs.org" target="_blank">three.js</a> canvas - interactive particles';
-    // container.appendChild( info );
     camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 1, 10000 );
     camera.position.set( 0, 300, 500 );
     scene = new THREE.Scene();
 
     //scene.fog = new THREE.Fog( 0x000000, 1, 1000 );
-
     var textureLoader = new THREE.TextureLoader();
 
     const thumbnails = [
@@ -215,7 +206,18 @@ $(document).ready(function(){
     composer.render();
   }
 
-  
+  // Utils
+  convertToBase64 = function(inputFile, callback){
+    var reader = new FileReader();
+    reader.onload = function(e) {
+      callback(e.target.result)
+    };
+    reader.onerror = function(e) {
+      callback(null);
+    };        
+    reader.readAsDataURL(inputFile);
+  };
+
 
    // req.checkBody('image', 'Invalid Image').optional().isBase64();
    //  req.checkBody('title', 'Title us required').notEmpty();
@@ -227,7 +229,7 @@ $(document).ready(function(){
     */ 
 
   var fbLoggedIn = false;
-  var fbAccessToken;
+  var fbAccessToken, inputBase64;
 
   var getWellSoonService = {
     authenticateUser: function(params, callback){
@@ -252,24 +254,41 @@ $(document).ready(function(){
       {
         'title': $('.input-name').val(),
         'detail': $('.input-message').val(),
-        'affiliation': $('.input-affiliation').val()
-
+        'affiliation': $('.input-affiliation').val(),
+        'image': inputBase64
       }, function(data){
         $('.lightbox-participate').css('display', 'none');
       });
    });
 
+    $('.btn-close').click(function(){
+      $('.lightbox-participate').css('display', 'none');
+    });
+
    $('.btn-participate').click(function(){
-    var loginAndAuthenticate = function (){
+    var authenticateUser = function (){
+      getWellSoonService.authenticateUser({token: fbAccessToken}, function(data){
+        $('.lightbox-participate').css('display', 'table');
+      });
+    };
+
+    $('.input-file').on('change', function(){
+      console.log(this.files);
+      var selectedFile = this.files[0];
+      convertToBase64(selectedFile, function(base64){
+        //console.log(base64);
+        inputBase64 = base64;
+      });
+    });
+
+    if(fbLoggedIn) {
+      authenticateUser();
+    }else {
       FB.login(function(response) {
-        console.log(response);
         if (response.status === 'connected') {
           fbLoggedIn = true;
           fbAccessToken = response.authResponse.accessToken;
-          getWellSoonService.authenticateUser({token: fbAccessToken}, function(data){
-            $('.lightbox-participate').css('display', 'table');
-          });
-          
+          authenticateUser();
         } else if (response.status === 'not_authorized') {
           fbLoggedIn = false;
           fbAccessToken = undefined;
@@ -278,23 +297,14 @@ $(document).ready(function(){
           fbAccessToken = undefined;
         }
       },{scope: 'public_profile,email'});
-    };
-
-    $('.btn-close').click(function(){
-      $('.lightbox-participate').css('display', 'none');
-    });
-
-    if(fbLoggedIn){
-      FB.logout(function(response) {
-        fbLoggedIn = false;
-        fbAccessToken = undefined;
-        loginAndAuthenticate();
-      });
-    }else {
-      loginAndAuthenticate();
     }
-
    });
+
+   // FB.logout(function(response) {
+   //      fbLoggedIn = false;
+   //      fbAccessToken = undefined;
+   //      loginAndAuthenticate();
+   //    });
 
   function statusChangeCallback(response) {
     // The response object is returned with a status field that lets the
@@ -365,7 +375,6 @@ $(document).ready(function(){
         'Thanks for logging in, ' + response.name + '!';
     });
   }
-
 
   // Initialization Code
   init();
