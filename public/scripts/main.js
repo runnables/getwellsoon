@@ -274,6 +274,24 @@ $(document).ready(function(){
     }
   };
 
+  function showLightbox() {
+    $('.lightbox-participate').css('display', 'table');
+    $('body').css('position', 'fixed');
+    $('body').css('top', '0px');
+    $('body').css('left', '0px');
+    $('body').css('bottom', '0px');
+    $('body').css('right', '0px');
+  }
+
+  function hideLightbox() {
+    $('.lightbox-participate').css('display', 'none');
+    $('body').css('position', null);
+    $('body').css('top', null);
+    $('body').css('left', null);
+    $('body').css('bottom', null);
+    $('body').css('right', null);
+  }
+
   $('.btn-participate').click(function(){
     if ($('.btn-participate').hasClass('disabled')) { return false; }
     $('.btn-participate').addClass('disabled');
@@ -282,13 +300,8 @@ $(document).ready(function(){
       var text = $('.btn-participate').html();
       $('.btn-participate').html('. . .');
       getWellSoonService.authenticateUser({ token: fbAccessToken }, function(data){
+        showLightbox();
         $('.btn-participate').removeClass('disabled');
-        $('body').css('position', 'fixed');
-        $('body').css('top', '0px');
-        $('body').css('left', '0px');
-        $('body').css('bottom', '0px');
-        $('body').css('right', '0px');
-        $('.lightbox-participate').css('display', 'table');
         $('.btn-participate').html(text);
       });
     };
@@ -322,7 +335,7 @@ $(document).ready(function(){
           fbLoggedIn = false;
           fbAccessToken = undefined;
         }
-      },{ scope: 'public_profile' });
+      }, { scope: 'public_profile' });
     }
   });
 
@@ -334,23 +347,13 @@ $(document).ready(function(){
         'affiliation': $('.input-affiliation').val(),
         'image': inputBase64
       }, function(data){
-        $('.lightbox-participate').css('display', 'none');
-        $('body').css('position', null);
-        $('body').css('top', null);
-        $('body').css('left', null);
-        $('body').css('bottom', null);
-        $('body').css('right', null);
+        hideLightbox();
       });
-   });
+  });
 
-    $('.btn-close').click(function(){
-      $('.lightbox-participate').css('display', 'none');
-      $('body').css('position', null);
-      $('body').css('top', null);
-      $('body').css('left', null);
-      $('body').css('bottom', null);
-      $('body').css('right', null);
-    });
+  $('.btn-close').click(function(){
+    hideLightbox();
+  });
 
   function statusChangeCallback(response) {
     // The response object is returned with a status field that lets the
@@ -414,7 +417,7 @@ $(document).ready(function(){
     }else {
       $(this).css('font-size', '16px');
     }
-    
+
   });
 
   // Initialization Code
