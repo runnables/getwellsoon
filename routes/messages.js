@@ -16,7 +16,10 @@ router.get('/', (req, res) => {
 		 	if (err) {
 		    	res.status(500).send({ error: err });
 		  	} else {
-		    	res.status(200).send(messages);
+		    	res.status(200).send({
+			    	messages,
+			    	next: messages[messages.length-1]._id
+		    	});
 		  	}
 	});
 
