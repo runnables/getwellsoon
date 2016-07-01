@@ -14,6 +14,7 @@ const cors = require('cors');
 
 
 const app = express();
+app.set('view engine', 'ejs');
 mongoose.connect(`mongodb://${config.get('database.host')}:${config.get('database.port')}/${config.get('database.name')}`);
 
 app.use(logger('dev'));
@@ -27,6 +28,11 @@ app.use(expressValidator({
   customValidators: {},
 }));
 app.use(authenticator.authenticate());
+app.use(express.static(__dirname + '/public'));
+
+app.get('/', (req, res) => {
+  res.render('index');
+});
 
 app.use('/users', routes.users);
 app.use(errorHandler());

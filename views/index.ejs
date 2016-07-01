@@ -1,0 +1,67 @@
+<!-- views/pages/index.ejs -->
+
+<!DOCTYPE html>
+<html>
+  <meta charset="UTF-8"/>
+  <title>ร่วมส่งคำอวยพรให้พี่พเยาว์</title>
+  <head>
+    <link rel="stylesheet/less" type="text/css" href="/main.less"></link>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/less.js/2.7.1/less.min.js"></script>
+    <script src="https://npmcdn.com/masonry-layout@4.1/dist/masonry.pkgd.min.js"></script>
+  </head>
+  <body>
+    <div class="container">
+      <div class="grid">
+        <div class="grid-item">
+          <div class="card">
+            <img src="https://www.sparklabs.com/forum/styles/comboot/theme/images/default_avatar.jpg"/>
+            <div class="card-footer">
+              <img src="https://www.sparklabs.com/forum/styles/comboot/theme/images/default_avatar.jpg"/>
+              <div class="info">
+                <div class="user-title">Title</div>
+                <div class="user-decsription">Description</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="grid-item">
+          <div class="card">
+            <img/>
+            <div class="card-footer">
+              <span>A</span>
+            </div>
+          </div>
+        </div>
+        <div class="grid-item">
+          <div class="card">
+            <img/>
+            <div class="card-footer">
+              <span>A</span>
+            </div>
+          </div>
+        </div>
+        <div class="grid-item">
+          <div class="card">
+            <img/>
+            <div class="card-footer">
+              <span>A</span>
+            </div>
+          </div>
+        </div>
+        <div class="grid-item">
+          <div class="card">
+            <img/>
+            <div class="card-footer">
+              <span>A</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script>
+      var msnry = new Masonry('.grid', {
+        itemSelector: '.grid-item'
+      });
+    </script>
+  </body>
+</html>
