@@ -3,8 +3,8 @@
 const mongoose = require('mongoose');
 
 const schema = new mongoose.Schema({
+  facebookId: { type: String },
   name: { type: String },
-  email: { type: String },
   profileImage: { type: String },
 });
 

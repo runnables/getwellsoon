@@ -11,7 +11,7 @@ const router = new Router();
 
 const getFacebookProfile = accessToken => (
   request
-  .get(`${facebookBaseUrl}/me?access_token=${accessToken}&fields=name,email,picture.width(200)`)
+  .get(`${facebookBaseUrl}/me?access_token=${accessToken}&fields=name,picture.width(200)`)
   .set('Accept', 'application/json')
 );
 
@@ -45,16 +45,14 @@ const loginWithFacebook = (req, res) => {
   return getFacebookProfile(req.body.token)
     .then(profile => {
       profile = profile.body;
-      console.log(profile);
       let profileImage = '';
-      if (!(profile && profile.email)) {
-        return Promise.reject({ message: 'facebook id is unavailable' });
+      if (!(profile && profile.id)) {
+        return Promise.reject({ message: 'facebookId is unavailable' });
       }
       if (profile.picture && profile.picture.data && profile.picture.data.url) {
         profileImage = profile.picture.data.url;
       }
-      return User.findOneAndUpdate({ email: profile.email }, {
-        facebookId: profile.id,
+      return User.findOneAndUpdate({ facebookId: profile.id }, {
         name: profile.name,
         profileImage,
       }, {
