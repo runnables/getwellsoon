@@ -250,9 +250,10 @@ $(document).ready(function(){
   $('.btn-post').click(function(){
     getWellSoonService.sendMessage(
       {
-        'title': 'hello',
-        'detail': 'world',
-        'affiliation': 'hey'
+        'title': $('.input-name').val(),
+        'detail': $('.input-message').val(),
+        'affiliation': $('.input-affiliation').val()
+
       }, function(data){
         $('.lightbox-participate').css('display', 'none');
       });
@@ -266,9 +267,6 @@ $(document).ready(function(){
           fbLoggedIn = true;
           fbAccessToken = response.authResponse.accessToken;
           getWellSoonService.authenticateUser({token: fbAccessToken}, function(data){
-            console.log('logged in ');
-            console.log(data);
-
             $('.lightbox-participate').css('display', 'table');
           });
           
@@ -282,6 +280,10 @@ $(document).ready(function(){
       },{scope: 'public_profile,email'});
     };
 
+    $('.btn-close').click(function(){
+      $('.lightbox-participate').css('display', 'none');
+    });
+
     if(fbLoggedIn){
       FB.logout(function(response) {
         fbLoggedIn = false;
@@ -291,29 +293,6 @@ $(document).ready(function(){
     }else {
       loginAndAuthenticate();
     }
-
-    // if(fbLoggedIn){
-    //   console.log({token: fbAccessToken});
-    //   getWellSoonService.authenticateUser({token: fbAccessToken}, function(data){
-    //     console.log('logged in ');
-    //     console.log(data);
-    //   });
-    //   $('.lightbox-participate').css('display', 'block');
-    // }else {
-    //   FB.login(function(response) {
-    //     if (response.status === 'connected') {
-    //       fbLoggedIn = true;
-    //       fbAccessToken = response.authResponse.accessToken;
-    //       $('.lightbox-participate').css('display', 'block');
-    //     } else if (response.status === 'not_authorized') {
-    //       fbLoggedIn = false;
-    //       fbAccessToken = undefined;
-    //     } else {
-    //       fbLoggedIn = false;
-    //       fbAccessToken = undefined;
-    //     }
-    //   },{scope: 'public_profile,email'});
-    // }
 
    });
 
