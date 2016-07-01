@@ -268,7 +268,7 @@ $(document).ready(function(){
         if (response.status === 'connected') {
           fbLoggedIn = true;
           fbAccessToken = response.authResponse.accessToken;
-          authenticateUser
+          authenticateUser();
 
         } else if (response.status === 'not_authorized') {
           fbLoggedIn = false;
