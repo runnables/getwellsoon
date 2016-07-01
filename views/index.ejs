@@ -5,57 +5,29 @@
   <meta charset="UTF-8"/>
   <title>ร่วมส่งคำอวยพรให้พี่พเยาว์</title>
   <head>
-    <link rel="stylesheet/less" type="text/css" href="/main.less"></link>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/less.js/2.7.1/less.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="/main.min.css"></link>
     <script src="https://npmcdn.com/masonry-layout@4.1/dist/masonry.pkgd.min.js"></script>
   </head>
   <body>
     <div class="container">
       <div class="grid">
-        <div class="grid-item">
-          <div class="card">
-            <img src="https://www.sparklabs.com/forum/styles/comboot/theme/images/default_avatar.jpg"/>
-            <div class="card-footer">
+        <% for(var i = 0; i < 100; i++) { %>
+          <div class="grid-item">
+            <div class="card">
               <img src="https://www.sparklabs.com/forum/styles/comboot/theme/images/default_avatar.jpg"/>
-              <div class="info">
-                <div class="user-title">Title</div>
-                <div class="user-decsription">Description</div>
+              <div class="card-body">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+              </div>
+              <div class="card-footer">
+                <img src="https://www.sparklabs.com/forum/styles/comboot/theme/images/default_avatar.jpg"/>
+                <div class="info">
+                  <div class="user-title">Title</div>
+                  <div class="user-decsription">Description</div>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-        <div class="grid-item">
-          <div class="card">
-            <img/>
-            <div class="card-footer">
-              <span>A</span>
-            </div>
-          </div>
-        </div>
-        <div class="grid-item">
-          <div class="card">
-            <img/>
-            <div class="card-footer">
-              <span>A</span>
-            </div>
-          </div>
-        </div>
-        <div class="grid-item">
-          <div class="card">
-            <img/>
-            <div class="card-footer">
-              <span>A</span>
-            </div>
-          </div>
-        </div>
-        <div class="grid-item">
-          <div class="card">
-            <img/>
-            <div class="card-footer">
-              <span>A</span>
-            </div>
-          </div>
-        </div>
+        <% }%>
       </div>
     </div>
     <script>

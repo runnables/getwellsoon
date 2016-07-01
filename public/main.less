@@ -19,6 +19,13 @@ body { margin: 0; padding: 0; background-color: #eee; }
       width: 100%;
       display: inherit;
     }
+    .card-body {
+      padding: 10px;
+      color: #333;
+      font-size: 13px;
+      line-height: 17px;
+      word-wrap: break-word;
+    }
     .card-footer {
       border-top: 1px solid #e7e7e7;
       padding: 10px;
@@ -36,22 +43,15 @@ body { margin: 0; padding: 0; background-color: #eee; }
         display: inline-block;
         vertical-align: top;
 
-        .user-title {
+        .user-title, .user-description {
           white-space: nowrap;
           overflow: hidden;
           text-overflow: ellipsis;
           color: #555;
-          font-weight: bold;
+          line-height: 15px;
         }
-        .user-description {
-          white-space: nowrap;
-          overflow: hidden;
-          text-overflow: ellipsis;
-          overflow: hidden;
-          color: #555;
-          display: block;
-          font-weight: normal;
-        }
+        .user-title { font-weight: bold; }
+        .user-description { display: block; font-weight: normal; }
       }
     }
   }
