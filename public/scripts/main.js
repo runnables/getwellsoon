@@ -332,7 +332,6 @@ $(document).ready(function(){
     };
 
     $('.input-file').on('change', function(){
-      console.log(this.files);
       var selectedFile = this.files[0];
       getImage(selectedFile, function(base64){
         //console.log(base64);
