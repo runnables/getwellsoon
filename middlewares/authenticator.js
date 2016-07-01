@@ -18,7 +18,7 @@ module.exports = {
       }
 
       AccessToken
-        .findOne({ _id: accessToken })
+        .findOne({ token: accessToken })
         .populate('user')
         .exec((err, foundAccessToken) => {
           if (err) {

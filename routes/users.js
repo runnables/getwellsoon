@@ -78,8 +78,11 @@ const loginWithFacebook = (req, res) => {
     });
 };
 
-router.get('/', (req, res) => {
-  res.status(200).send({ message: 'success' });
+router.get('/me', (req, res) => {
+  if (req.currentUser) {
+    return res.status(200).send(req.currentUser);
+  }
+  return res.status(403).send({message: 'Forbidden'});
 });
 
 router.post('/login', loginWithFacebook);
