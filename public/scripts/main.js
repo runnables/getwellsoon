@@ -240,31 +240,29 @@ $(document).ready(function(){
   // };
 
   function getImage(file, callback) {
-    return new Promise(resolve => {
-      file.reader = new FileReader();
-      file.reader.readAsDataURL(file);
-      file.reader.onload = encode => {
-        file.img = new Image();
-        file.img.src = encode.target.result;
-        file.canvas = document.createElement('canvas');
-        file.canvas.width = file.img.width;
-        file.canvas.height = file.img.height;
+    file.reader = new FileReader();
+    file.reader.readAsDataURL(file);
+    file.reader.onload = encode => {
+      file.img = new Image();
+      file.img.src = encode.target.result;
+      file.canvas = document.createElement('canvas');
+      file.canvas.width = file.img.width;
+      file.canvas.height = file.img.height;
 
-        if (file.canvas.width > 1280) {
-          file.canvas.width = 1280;
-          file.canvas.height = file.img.height / (file.img.width / 1280);
-        } else if (file.canvas.height > 1280) {
-          file.canvas.width = file.img.width / (file.img.height / 1280);
-          file.canvas.height = 1280;
-        }
+      if (file.canvas.width > 1280) {
+        file.canvas.width = 1280;
+        file.canvas.height = file.img.height / (file.img.width / 1280);
+      } else if (file.canvas.height > 1280) {
+        file.canvas.width = file.img.width / (file.img.height / 1280);
+        file.canvas.height = 1280;
+      }
 
-        file.context = file.canvas.getContext('2d');
-        file.context.drawImage(file.img, 0, 0, file.canvas.width, file.canvas.height);
-        file.imageType = file.type.split('/')[file.type.split('/').length];
+      file.context = file.canvas.getContext('2d');
+      file.context.drawImage(file.img, 0, 0, file.canvas.width, file.canvas.height);
+      file.imageType = file.type.split('/')[file.type.split('/').length];
 
-        callback(file.canvas.toDataURL(`image/${file.imageType}`));
-      };
-    });
+      callback(file.canvas.toDataURL(`image/${file.imageType}`));
+    };
   }
 
 
@@ -331,15 +329,6 @@ $(document).ready(function(){
       });
     };
 
-    $('.input-file').on('change', function(){
-      var selectedFile = this.files[0];
-      console.log('inputFile has changed');
-      getImage(selectedFile, function(base64){
-        console.log(base64);
-        inputBase64 = base64;
-      });
-    });
-
     if(fbLoggedIn) {
       authenticateUser();
     } else {
@@ -362,6 +351,23 @@ $(document).ready(function(){
         }
       }, { scope: 'public_profile' });
     }
+  });
+
+  $('.btn-image').click(function() {
+    $('.input-file').click();
+  });
+
+  $('.input-file').on('change', function(){
+    if ($('.btn-image').hasClass('disabled')) { return false; }
+    $('.btn-image').addClass('disabled');
+    var selectedFile = this.files[0];
+    var text = $('.btn-image').html();
+    $('.btn-image').html('. . .');
+    getImage(selectedFile, function(base64){
+      $('.btn-image').html(text);
+      $('.btn-image').removeClass('disabled');
+      inputBase64 = base64;
+    });
   });
 
   $('.btn-post').click(function(){
