@@ -206,7 +206,18 @@ $(document).ready(function(){
     composer.render();
   }
 
-  
+  // Utils
+  convertToBase64 = function(inputFile, callback){
+    var reader = new FileReader();
+    reader.onload = function(e) {
+      callback(e.target.result)
+    };
+    reader.onerror = function(e) {
+      callback(null);
+    };        
+    reader.readAsDataURL(inputFile);
+  };
+
 
    // req.checkBody('image', 'Invalid Image').optional().isBase64();
    //  req.checkBody('title', 'Title us required').notEmpty();
@@ -218,7 +229,7 @@ $(document).ready(function(){
     */ 
 
   var fbLoggedIn = false;
-  var fbAccessToken;
+  var fbAccessToken, inputBase64;
 
   var getWellSoonService = {
     authenticateUser: function(params, callback){
@@ -243,8 +254,8 @@ $(document).ready(function(){
       {
         'title': $('.input-name').val(),
         'detail': $('.input-message').val(),
-        'affiliation': $('.input-affiliation').val()
-
+        'affiliation': $('.input-affiliation').val(),
+        'image': inputBase64
       }, function(data){
         $('.lightbox-participate').css('display', 'none');
       });
@@ -261,6 +272,15 @@ $(document).ready(function(){
       });
     };
 
+    $('.input-file').on('change', function(){
+      console.log(this.files);
+      var selectedFile = this.files[0];
+      convertToBase64(selectedFile, function(base64){
+        //console.log(base64);
+        inputBase64 = base64;
+      });
+    });
+
     if(fbLoggedIn) {
       authenticateUser();
     }else {
@@ -269,7 +289,6 @@ $(document).ready(function(){
           fbLoggedIn = true;
           fbAccessToken = response.authResponse.accessToken;
           authenticateUser();
-
         } else if (response.status === 'not_authorized') {
           fbLoggedIn = false;
           fbAccessToken = undefined;
