@@ -285,11 +285,7 @@ $(document).ready(function(){
 
   function hideLightbox() {
     $('.lightbox-participate').css('display', 'none');
-    $('body').css('position', null);
-    $('body').css('top', null);
-    $('body').css('left', null);
-    $('body').css('bottom', null);
-    $('body').css('right', null);
+    $('body').removeAttr('style');
   }
 
   $('.btn-participate').click(function(){
