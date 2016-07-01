@@ -70,7 +70,7 @@
                 <div class="card-body"><%= message.detail %></div>
                 <div class="card-footer">
                   <div class="info">
-                    <div class="user-title"><%= (message.user || {}).name || '-' %></div>
+                    <div class="user-title"><%= (message.user || {}).name.split(' ')[0] %></div>
                     <div class="user-description"><%= message.affiliation %></div>
                   </div>
                   <img src="<%= (message.user || {}).profileImage %>"/>
