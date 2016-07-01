@@ -40,9 +40,10 @@ router.get('/', (req, res) => {
 });
 
 router.post('/', (req, res) => {
-  req.checkBody('image', 'Invalid Image').notEmpty().isBase64();
-  req.checkBody('title', 'Invalid title').notEmpty();
-  req.checkBody('detail', 'Invalid detail').notEmpty();
+  req.checkBody('image', 'Invalid Image').optional().isBase64();
+  req.checkBody('title', 'Title us required').notEmpty();
+  req.checkBody('detail', 'detail is required').notEmpty();
+  req.checkBody('affiliation', 'affiliation is required').optional();
 
   req.sanitizeBody('title').toString();
   req.sanitizeBody('detail').toString();
@@ -56,19 +57,29 @@ router.post('/', (req, res) => {
   }
 
   const message = new Message({
-    image: req.body.image,
     title: req.body.title,
     detail: req.body.detail,
+    affiliation: req.body.affiliation,
   });
 
   const dir = path.join(global.basePath, 'media', 'messages');
   const coverImagePath = path.join(dir, `${message._id}.jpg`);
 
-  return fs.writeFileAsync(coverImagePath, req.body.image, 'base64')
-    .then(() => {
-      message.imagePath = `/media/messages/${message._id}.jpg`;
-      return message.save();
-    })
+
+  if (req.body.image) {
+    return fs.writeFileAsync(coverImagePath, req.body.image, 'base64')
+      .then(() => {
+        message.imagePath = `/media/messages/${message._id}.jpg`;
+        return message.save();
+      })
+      .then(() => (
+        res.status(200).send(message)
+      ))
+      .catch(err => {
+        res.status(500).send(err);
+      });
+  }
+  return message.save()
     .then(() => (
       res.status(200).send(message)
     ))
