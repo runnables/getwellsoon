@@ -168,7 +168,9 @@ $(document).ready(function(){
           for (var i = 0; i < data.messages.length; i++) {
             var message = data.messages[i];
             $('.grid').append($('<div>').loadTemplate($("#template"), {
-              cardClass: 'card type' + (Math.floor(Math.random() * 4) + 1),
+              //cardClass: 'card type' + (Math.floor(Math.random() * 4) + 1),
+              cardClass: 'card type' + (Math.floor(Math.random() * 3) + 1),
+              //cardClass: 'card',
               imageClass: message.imagePath ? 'block' : 'none',
               imageSrc: message.imagePath,
               detail: message.detail,
@@ -380,7 +382,14 @@ $(document).ready(function(){
   }(document, 'script', 'facebook-jssdk'));
 
   $('.card-body').each(function(){
-    $(this).css('font-size', '18px');
+    if($(this).html().length < 10){
+      $(this).css('font-size', '36px');
+    } else if($(this).html().length < 40) {
+      $(this).css('font-size', '24px');
+    }else {
+      $(this).css('font-size', '16px');
+    }
+    
   });
 
   // Initialization Code

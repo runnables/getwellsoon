@@ -83,7 +83,7 @@
         <div class="grid">
           <% messages.forEach(function(message) { %>
             <div class="grid-item">
-              <div class="card type<%= 1 + Math.floor(Math.random() * 4)%>">
+              <div class="card type<%= 1 + Math.floor(Math.random() * 3)%>">
                 <img style="display: <%= message.imagePath ? 'block' : 'none' %>" src="<%= message.imagePath %>"/>
                 <div class="card-body"><%= message.detail %></div>
                 <div class="card-footer">
