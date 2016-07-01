@@ -7,8 +7,16 @@
   <head>
     <link rel="stylesheet" type="text/css" href="/main.min.css"></link>
     <script src="https://npmcdn.com/masonry-layout@4.1/dist/masonry.pkgd.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+    <script src="/scripts/three.js"></script>
+    <script src="/scripts/threejs/renderers/Projector.js"></script>
+    <script src="/scripts/threejs/renderers/CanvasRenderer.js"></script>
+    <script src="/scripts/threejs/libs/stats.min.js"></script>
+    <script src="/scripts/main.js"></script>
   </head>
   <body>
+    <div id="threejs">
+    </div>
     <div class="container">
       <div class="grid">
         <% for(var i = 0; i < 100; i++) { %>
