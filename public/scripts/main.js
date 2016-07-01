@@ -162,7 +162,7 @@ $(document).ready(function(){
     $(window).scroll(function() {
       if ($(window).scrollTop() + $(window).height() >= $(document).height() - 300 && !$('#lock').val() && $('#next').val()) {
         $('#lock').val('true');
-        $.get('/messages?lastId=' + $('#next').val(), function(data) {
+        getWellSoonService.getMessages($('#next').val(), function(data) {
           $('#lock').val('');
           $('#next').val(data.next);
           for (var i = 0; i < data.messages.length; i++) {
@@ -251,43 +251,43 @@ $(document).ready(function(){
   var fbAccessToken, inputBase64;
 
   var getWellSoonService = {
-    authenticateUser: function(params, callback){
+    authenticateUser: function(params, callback) {
       $.post('/users/login', {
         'token': params.token
       }, function(data){
         getWellSoonService.token = data.token;
         callback(data);
       }, 'json');
-    }, sendMessage: function(params, callback){
+    },
+    sendMessage: function(params, callback) {
       if(getWellSoonService.token !== undefined){
         params.accessToken = getWellSoonService.token;
       }
       $.post('/messages', params, function(data){
         callback(data);
       }, 'json');
+    },
+    getMessages: function(lastId, callback) {
+      $.get('/messages?lastId=' + lastId, callback);
     }
   };
 
-  $('.btn-post').click(function(){
-    getWellSoonService.sendMessage(
-      {
-        'title': $('.input-name').val(),
-        'detail': $('.input-message').val(),
-        'affiliation': $('.input-affiliation').val(),
-        'image': inputBase64
-      }, function(data){
-        $('.lightbox-participate').css('display', 'none');
-      });
-   });
+  $('.btn-participate').click(function(){
+    if ($('.btn-participate').hasClass('disabled')) { return false; }
+    $('.btn-participate').addClass('disabled');
 
-    $('.btn-close').click(function(){
-      $('.lightbox-participate').css('display', 'none');
-    });
-
-   $('.btn-participate').click(function(){
     var authenticateUser = function (){
-      getWellSoonService.authenticateUser({token: fbAccessToken}, function(data){
+      var text = $('.btn-participate').html();
+      $('.btn-participate').html('. . .');
+      getWellSoonService.authenticateUser({ token: fbAccessToken }, function(data){
+        $('.btn-participate').removeClass('disabled');
+        $('body').css('position', 'fixed');
+        $('body').css('top', '0px');
+        $('body').css('left', '0px');
+        $('body').css('bottom', '0px');
+        $('body').css('right', '0px');
         $('.lightbox-participate').css('display', 'table');
+        $('.btn-participate').html(text);
       });
     };
 
@@ -302,8 +302,13 @@ $(document).ready(function(){
 
     if(fbLoggedIn) {
       authenticateUser();
-    }else {
+    } else {
+      var text = $('.btn-participate').html();
+      $('.btn-participate').html('. . .');
       FB.login(function(response) {
+        $('.btn-participate').html(text);
+        $('.btn-participate').removeClass('disabled');
+
         if (response.status === 'connected') {
           fbLoggedIn = true;
           fbAccessToken = response.authResponse.accessToken;
@@ -317,13 +322,33 @@ $(document).ready(function(){
         }
       },{ scope: 'public_profile' });
     }
+  });
+
+  $('.btn-post').click(function(){
+    getWellSoonService.sendMessage(
+      {
+        'title': $('.input-name').val(),
+        'detail': $('.input-message').val(),
+        'affiliation': $('.input-affiliation').val(),
+        'image': inputBase64
+      }, function(data){
+        $('.lightbox-participate').css('display', 'none');
+        $('body').css('position', null);
+        $('body').css('top', null);
+        $('body').css('left', null);
+        $('body').css('bottom', null);
+        $('body').css('right', null);
+      });
    });
 
-   // FB.logout(function(response) {
-   //      fbLoggedIn = false;
-   //      fbAccessToken = undefined;
-   //      loginAndAuthenticate();
-   //    });
+    $('.btn-close').click(function(){
+      $('.lightbox-participate').css('display', 'none');
+      $('body').css('position', null);
+      $('body').css('top', null);
+      $('body').css('left', null);
+      $('body').css('bottom', null);
+      $('body').css('right', null);
+    });
 
   function statusChangeCallback(response) {
     // The response object is returned with a status field that lets the
