@@ -335,22 +335,17 @@ $(document).ready(function(){
       // Logged into your app and Facebook.
       fbLoggedIn = true;
       fbAccessToken = response.authResponse.accessToken;
-      //testAPI();
       //$('.lightbox-participate').css('display', 'block');
 
     } else if (response.status === 'not_authorized') {
       fbLoggedIn = false;
       fbAccessToken = undefined;
       // The person is logged into Facebook, but not your app.
-      //document.getElementById('status').innerHTML = 'Please log ' +
-      //'into this app.';
     } else {
       fbLoggedIn = false;
       fbAccessToken = undefined;
       // The person is not logged into Facebook, so we're not sure if
       // they are logged into this app or not.
-      //document.getElementById('status').innerHTML = 'Please log ' +
-      //'into Facebook.';
     }
   }
 
@@ -384,16 +379,9 @@ $(document).ready(function(){
     fjs.parentNode.insertBefore(js, fjs);
   }(document, 'script', 'facebook-jssdk'));
 
-  // Here we run a very simple test of the Graph API after login is
-  // successful.  See statusChangeCallback() for when this call is made.
-  function testAPI() {
-    console.log('Welcome!  Fetching your information.... ');
-    FB.api('/me', function(response) {
-      console.log('Successful login for: ' + response.name);
-      document.getElementById('status').innerHTML =
-        'Thanks for logging in, ' + response.name + '!';
-    });
-  }
+  $('.card-body').each(function(){
+    $(this).css('font-size', '18px');
+  });
 
   // Initialization Code
   init();
