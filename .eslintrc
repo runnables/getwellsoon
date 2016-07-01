@@ -1,0 +1,14 @@
+{
+    "extends": "airbnb",
+    parserOptions: {
+      sourceType: "script"
+    },
+    "rules": {
+      "no-param-reassign": "off",
+      "no-shadow": "off",
+      "no-underscore-dangle": "off",
+      "strict": 0,
+
+    }
+
+}
