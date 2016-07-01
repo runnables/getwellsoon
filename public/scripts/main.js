@@ -23,7 +23,6 @@ $(document).ready(function(){
   function init() {
 
     var container = document.getElementById('threejs');
-    console.log(container);
 
     camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 1, 10000 );
     camera.position.set( 0, 300, 500 );
@@ -139,7 +138,6 @@ $(document).ready(function(){
     //
     raycaster = new THREE.Raycaster();
     mouse = new THREE.Vector2();
-    //renderer = new THREE.CanvasRenderer();
     renderer = new THREE.WebGLRenderer();
 
     renderer.setClearColor( 0xf0f0f0 );
@@ -158,10 +156,31 @@ $(document).ready(function(){
     effect.renderToScreen = true;
     composer.addPass( effect );
 
-    //container.appendChild( stats.dom );
     document.addEventListener( 'mousemove', onDocumentMouseMove, false );
     //
     window.addEventListener( 'resize', onWindowResize, false );
+    $(window).scroll(function() {
+      if ($(window).scrollTop() + $(window).height() >= $(document).height() - 300 && !$('#lock').val() && $('#next').val()) {
+        $('#lock').val('true');
+        $.get('/messages?lastId=' + $('#next').val(), function(data) {
+          $('#lock').val('');
+          $('#next').val(data.next);
+          for (var i = 0; i < data.messages.length; i++) {
+            var message = data.messages[i];
+            $('.grid').append($('<div>').loadTemplate($("#template"), {
+              cardClass: 'card type' + (Math.floor(Math.random() * 4) + 1),
+              imageClass: message.imagePath ? 'block' : 'none',
+              imageSrc: message.imagePath,
+              detail: message.detail,
+              name: ((message.user || {}).name || '').split(' ')[0],
+              affiliation: message.affiliation,
+              profileImage: (message.user || {}).profileImage
+            }).children().html());
+            var msnry = new Masonry( '.grid', { itemSelector: '.grid-item' });
+          }
+        });
+      }
+    });
   }
   function onWindowResize() {
     camera.aspect = window.innerWidth / window.innerHeight;
@@ -214,7 +233,7 @@ $(document).ready(function(){
     };
     reader.onerror = function(e) {
       callback(null);
-    };        
+    };
     reader.readAsDataURL(inputFile);
   };
 
@@ -226,7 +245,7 @@ $(document).ready(function(){
 
    /**
     * Callbacks
-    */ 
+    */
 
   var fbLoggedIn = false;
   var fbAccessToken, inputBase64;
@@ -247,7 +266,7 @@ $(document).ready(function(){
         callback(data);
       }, 'json');
     }
-  }; 
+  };
 
   $('.btn-post').click(function(){
     getWellSoonService.sendMessage(
@@ -344,7 +363,7 @@ $(document).ready(function(){
   window.fbAsyncInit = function() {
     FB.init({
       appId      : '290151501335387',
-      cookie     : true,  // enable cookies to allow the server to access 
+      cookie     : true,  // enable cookies to allow the server to access
                           // the session
       xfbml      : true,  // parse social plugins on this page
       version    : 'v2.5' // use graph api version 2.5
@@ -379,5 +398,5 @@ $(document).ready(function(){
   // Initialization Code
   init();
   animate();
-  
+
 });

@@ -10,6 +10,8 @@
     <link rel="stylesheet" type="text/css" href="/main.min.css"></link>
     <script src="https://npmcdn.com/masonry-layout@4.1/dist/masonry.pkgd.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-infinitescroll/2.1.0/jquery.infinitescroll.min.js"></script>
+    <script src="/scripts/jquery.loadTemplate.min.js"></script>
     <script src="/scripts/three.js"></script>
     <script src="/scripts/threejs/renderers/Projector.js"></script>
     <script src="/scripts/threejs/renderers/CanvasRenderer.js"></script>
@@ -25,6 +27,21 @@
     <script src="/scripts/threejs/postprocessing/ShaderPass.js"></script>
 
     <script src="/scripts/main.js"></script>
+    <script type="text/html" id="template" class="grid-item2">
+      <div class="grid-item">
+        <div data-class="cardClass">
+          <img data-class="imageClass" data-src="imageSrc"/>
+          <div class="card-body" data-content="detail"></div>
+          <div class="card-footer">
+            <div class="info">
+              <div class="user-title" data-content="name"></div>
+              <div class="user-description" data-content="affiliation"></div>
+            </div>
+            <img data-src="profileImage"/>
+          </div>
+        </div>
+      </div>
+    </script>
   </head>
   <body>
     <script>
@@ -45,6 +62,8 @@
        }(document, 'script', 'facebook-jssdk'));
     </script>
     <div class="btn btn-primary btn-participate">ร่วมส่งกำลังใจ</div>
+    <input type="hidden" id="next" value="<%=next%>">
+    <input type="hidden" id="lock" value="">
     <div id="threejs" class="hero">
       <div class="hero-overlay">
         <div class="hero-text">
@@ -66,11 +85,11 @@
           <% messages.forEach(function(message) { %>
             <div class="grid-item">
               <div class="card type<%= 1 + Math.floor(Math.random() * 4)%>">
-                <img style="display: <%= message.imagePath ? 'block' : 'none' %>" src=""/>
+                <img style="display: <%= message.imagePath ? 'block' : 'none' %>" src="<%= message.imagePath %>"/>
                 <div class="card-body"><%= message.detail %></div>
                 <div class="card-footer">
                   <div class="info">
-                    <div class="user-title"><%= (message.user || {}).name.split(' ')[0] %></div>
+                    <div class="user-title"><%= ((message.user || {}).name || '').split(' ')[0] %></div>
                     <div class="user-description"><%= message.affiliation %></div>
                   </div>
                   <img src="<%= (message.user || {}).profileImage %>"/>
