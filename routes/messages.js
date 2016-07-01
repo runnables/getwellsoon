@@ -69,6 +69,7 @@ router.post('/', (req, res) => {
 
 
     if (req.body.image) {
+      console.log('has image');
       return fs.writeFileAsync(coverImagePath, req.body.image, 'base64')
         .then(() => {
           message.imagePath = `/media/messages/${message._id}.jpg`;
@@ -78,6 +79,7 @@ router.post('/', (req, res) => {
           res.status(200).send(message)
         ))
         .catch(err => {
+          console.log('image err', err);
           res.status(500).send(err);
         });
     }

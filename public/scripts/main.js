@@ -386,6 +386,12 @@ $(document).ready(function(){
     }
 
     if (!nameExists || !messageExists) return;
+    console.log({
+      'title': $('.input-name').val(),
+      'detail': $('.input-message').val(),
+      'affiliation': $('.input-affiliation').val(),
+      'image': inputBase64
+    });
     getWellSoonService.sendMessage(
       {
         'title': $('.input-name').val(),
