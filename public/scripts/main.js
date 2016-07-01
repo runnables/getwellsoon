@@ -43,7 +43,7 @@ $(document).ready(function(){
 
 
     $.ajax({
-      url: 'http://api.randomuser.me/?inc=name,picture&results=500',
+      url: 'http://api.randomuser.me/?inc=name,picture&results=100',
       dataType: 'json',
       success: function(data){
         console.log(data);
@@ -59,19 +59,6 @@ $(document).ready(function(){
         }
       }
     });
-
-    /*
-    for ( var i = 0; i < 100; i ++ ) {
-      // var particle = new THREE.Sprite( new THREE.SpriteCanvasMaterial( { color: Math.random() * 0x808080 + 0x808080, program: programStroke } ) );
-      var particle = new THREE.Sprite(  new THREE.SpriteMaterial( { map: mapB, color: 0xffffff, fog: true } ) );
-
-      particle.position.x = Math.random() * 800 - 400;
-      particle.position.y = Math.random() * 800 - 400;
-      particle.position.z = Math.random() * 800 - 400;
-      particle.scale.x = particle.scale.y = Math.random() * 20 + 20;
-      scene.add( particle );
-    }
-    */
 
     //
     raycaster = new THREE.Raycaster();
@@ -144,6 +131,181 @@ $(document).ready(function(){
     composer.render();
   }
 
+  
+
+   // req.checkBody('image', 'Invalid Image').optional().isBase64();
+   //  req.checkBody('title', 'Title us required').notEmpty();
+   //  req.checkBody('detail', 'detail is required').notEmpty();
+   //  req.checkBody('affiliation', 'affiliation is required').optional();
+
+   /**
+    * Callbacks
+    */ 
+
+  var fbLoggedIn = false;
+  var fbAccessToken;
+
+  var getWellSoonService = {
+    authenticateUser: function(params, callback){
+      $.post('/users/login', {
+        'token': params.token
+      }, function(data){
+        getWellSoonService.token = data.token;
+        callback(data);
+      }, 'json');
+    }, sendMessage: function(params, callback){
+      if(getWellSoonService.token !== undefined){
+        params.accessToken = getWellSoonService.token;
+      }
+      $.post('/messages', params, function(data){
+        callback(data);
+      }, 'json');
+    }
+  }; 
+
+  $('.btn-post').click(function(){
+    getWellSoonService.sendMessage(
+      {
+        'title': 'hello',
+        'detail': 'world',
+        'affiliation': 'hey'
+      }, function(data){
+        $('.lightbox-participate').css('display', 'none');
+      });
+   });
+
+   $('.btn-participate').click(function(){
+    var loginAndAuthenticate = function (){
+      FB.login(function(response) {
+        console.log(response);
+        if (response.status === 'connected') {
+          fbLoggedIn = true;
+          fbAccessToken = response.authResponse.accessToken;
+          getWellSoonService.authenticateUser({token: fbAccessToken}, function(data){
+            console.log('logged in ');
+            console.log(data);
+
+            $('.lightbox-participate').css('display', 'table');
+          });
+          
+        } else if (response.status === 'not_authorized') {
+          fbLoggedIn = false;
+          fbAccessToken = undefined;
+        } else {
+          fbLoggedIn = false;
+          fbAccessToken = undefined;
+        }
+      },{scope: 'public_profile,email'});
+    };
+
+    if(fbLoggedIn){
+      FB.logout(function(response) {
+        fbLoggedIn = false;
+        fbAccessToken = undefined;
+        loginAndAuthenticate();
+      });
+    }else {
+      loginAndAuthenticate();
+    }
+
+    // if(fbLoggedIn){
+    //   console.log({token: fbAccessToken});
+    //   getWellSoonService.authenticateUser({token: fbAccessToken}, function(data){
+    //     console.log('logged in ');
+    //     console.log(data);
+    //   });
+    //   $('.lightbox-participate').css('display', 'block');
+    // }else {
+    //   FB.login(function(response) {
+    //     if (response.status === 'connected') {
+    //       fbLoggedIn = true;
+    //       fbAccessToken = response.authResponse.accessToken;
+    //       $('.lightbox-participate').css('display', 'block');
+    //     } else if (response.status === 'not_authorized') {
+    //       fbLoggedIn = false;
+    //       fbAccessToken = undefined;
+    //     } else {
+    //       fbLoggedIn = false;
+    //       fbAccessToken = undefined;
+    //     }
+    //   },{scope: 'public_profile,email'});
+    // }
+
+   });
+
+  function statusChangeCallback(response) {
+    // The response object is returned with a status field that lets the
+    // app know the current login status of the person.
+    // Full docs on the response object can be found in the documentation
+    // for FB.getLoginStatus().
+    console.log(response);
+    if (response.status === 'connected') {
+      // Logged into your app and Facebook.
+      fbLoggedIn = true;
+      fbAccessToken = response.authResponse.accessToken;
+      //testAPI();
+      //$('.lightbox-participate').css('display', 'block');
+
+    } else if (response.status === 'not_authorized') {
+      fbLoggedIn = false;
+      fbAccessToken = undefined;
+      // The person is logged into Facebook, but not your app.
+      //document.getElementById('status').innerHTML = 'Please log ' +
+      //'into this app.';
+    } else {
+      fbLoggedIn = false;
+      fbAccessToken = undefined;
+      // The person is not logged into Facebook, so we're not sure if
+      // they are logged into this app or not.
+      //document.getElementById('status').innerHTML = 'Please log ' +
+      //'into Facebook.';
+    }
+  }
+
+  function checkLoginState() {
+    FB.getLoginStatus(function(response) {
+      statusChangeCallback(response);
+    });
+  }
+
+  window.fbAsyncInit = function() {
+    FB.init({
+      appId      : '290151501335387',
+      cookie     : true,  // enable cookies to allow the server to access 
+                          // the session
+      xfbml      : true,  // parse social plugins on this page
+      version    : 'v2.5' // use graph api version 2.5
+    });
+
+    FB.getLoginStatus(function(response) {
+      statusChangeCallback(response);
+    });
+
+  };
+
+  // Load the SDK asynchronously
+  (function(d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) return;
+    js = d.createElement(s); js.id = id;
+    js.src = "//connect.facebook.net/en_US/sdk.js";
+    fjs.parentNode.insertBefore(js, fjs);
+  }(document, 'script', 'facebook-jssdk'));
+
+  // Here we run a very simple test of the Graph API after login is
+  // successful.  See statusChangeCallback() for when this call is made.
+  function testAPI() {
+    console.log('Welcome!  Fetching your information.... ');
+    FB.api('/me', function(response) {
+      console.log('Successful login for: ' + response.name);
+      document.getElementById('status').innerHTML =
+        'Thanks for logging in, ' + response.name + '!';
+    });
+  }
+
+
+  // Initialization Code
   init();
   animate();
+  
 });
