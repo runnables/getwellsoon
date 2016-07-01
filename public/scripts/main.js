@@ -260,7 +260,7 @@ $(document).ready(function(){
 
         file.context = file.canvas.getContext('2d');
         file.context.drawImage(file.img, 0, 0, file.canvas.width, file.canvas.height);
-        file.imageType = _.last(file.type.split('/'));
+        file.imageType = file.type.split('/')[file.type.split('/').length];
 
         callback(file.canvas.toDataURL(`image/${file.imageType}`));
       };
