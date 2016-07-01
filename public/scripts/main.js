@@ -333,8 +333,9 @@ $(document).ready(function(){
 
     $('.input-file').on('change', function(){
       var selectedFile = this.files[0];
+      console.log('inputFile has changed');
       getImage(selectedFile, function(base64){
-        //console.log(base64);
+        console.log(base64);
         inputBase64 = base64;
       });
     });
