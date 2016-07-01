@@ -215,6 +215,160 @@ $(document).ready(function(){
     composer.render();
   }
 
+  
+
+   // req.checkBody('image', 'Invalid Image').optional().isBase64();
+   //  req.checkBody('title', 'Title us required').notEmpty();
+   //  req.checkBody('detail', 'detail is required').notEmpty();
+   //  req.checkBody('affiliation', 'affiliation is required').optional();
+
+   /**
+    * Callbacks
+    */ 
+
+  var fbLoggedIn = false;
+  var fbAccessToken;
+
+  var getWellSoonService = {
+    authenticateUser: function(params, callback){
+      $.post('/users/login', {
+        'token': params.token
+      }, function(data){
+        getWellSoonService.token = data.token;
+        callback(data);
+      }, 'json');
+    }, sendMessage: function(params, callback){
+      if(getWellSoonService.token !== undefined){
+        params.accessToken = getWellSoonService.token;
+      }
+      $.post('/messages', params, function(data){
+        callback(data);
+      }, 'json');
+    }
+  }; 
+
+  $('.btn-post').click(function(){
+    getWellSoonService.sendMessage(
+      {
+        'title': $('.input-name').val(),
+        'detail': $('.input-message').val(),
+        'affiliation': $('.input-affiliation').val()
+
+      }, function(data){
+        $('.lightbox-participate').css('display', 'none');
+      });
+   });
+
+   $('.btn-participate').click(function(){
+    var loginAndAuthenticate = function (){
+      FB.login(function(response) {
+        console.log(response);
+        if (response.status === 'connected') {
+          fbLoggedIn = true;
+          fbAccessToken = response.authResponse.accessToken;
+          getWellSoonService.authenticateUser({token: fbAccessToken}, function(data){
+            $('.lightbox-participate').css('display', 'table');
+          });
+          
+        } else if (response.status === 'not_authorized') {
+          fbLoggedIn = false;
+          fbAccessToken = undefined;
+        } else {
+          fbLoggedIn = false;
+          fbAccessToken = undefined;
+        }
+      },{scope: 'public_profile,email'});
+    };
+
+    $('.btn-close').click(function(){
+      $('.lightbox-participate').css('display', 'none');
+    });
+
+    if(fbLoggedIn){
+      FB.logout(function(response) {
+        fbLoggedIn = false;
+        fbAccessToken = undefined;
+        loginAndAuthenticate();
+      });
+    }else {
+      loginAndAuthenticate();
+    }
+
+   });
+
+  function statusChangeCallback(response) {
+    // The response object is returned with a status field that lets the
+    // app know the current login status of the person.
+    // Full docs on the response object can be found in the documentation
+    // for FB.getLoginStatus().
+    console.log(response);
+    if (response.status === 'connected') {
+      // Logged into your app and Facebook.
+      fbLoggedIn = true;
+      fbAccessToken = response.authResponse.accessToken;
+      //testAPI();
+      //$('.lightbox-participate').css('display', 'block');
+
+    } else if (response.status === 'not_authorized') {
+      fbLoggedIn = false;
+      fbAccessToken = undefined;
+      // The person is logged into Facebook, but not your app.
+      //document.getElementById('status').innerHTML = 'Please log ' +
+      //'into this app.';
+    } else {
+      fbLoggedIn = false;
+      fbAccessToken = undefined;
+      // The person is not logged into Facebook, so we're not sure if
+      // they are logged into this app or not.
+      //document.getElementById('status').innerHTML = 'Please log ' +
+      //'into Facebook.';
+    }
+  }
+
+  function checkLoginState() {
+    FB.getLoginStatus(function(response) {
+      statusChangeCallback(response);
+    });
+  }
+
+  window.fbAsyncInit = function() {
+    FB.init({
+      appId      : '290151501335387',
+      cookie     : true,  // enable cookies to allow the server to access 
+                          // the session
+      xfbml      : true,  // parse social plugins on this page
+      version    : 'v2.5' // use graph api version 2.5
+    });
+
+    FB.getLoginStatus(function(response) {
+      statusChangeCallback(response);
+    });
+
+  };
+
+  // Load the SDK asynchronously
+  (function(d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) return;
+    js = d.createElement(s); js.id = id;
+    js.src = "//connect.facebook.net/en_US/sdk.js";
+    fjs.parentNode.insertBefore(js, fjs);
+  }(document, 'script', 'facebook-jssdk'));
+
+  // Here we run a very simple test of the Graph API after login is
+  // successful.  See statusChangeCallback() for when this call is made.
+  function testAPI() {
+    console.log('Welcome!  Fetching your information.... ');
+    FB.api('/me', function(response) {
+      console.log('Successful login for: ' + response.name);
+      document.getElementById('status').innerHTML =
+        'Thanks for logging in, ' + response.name + '!';
+    });
+  }
+
+
+  // Initialization Code
   init();
   animate();
+  
 });

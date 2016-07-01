@@ -45,6 +45,7 @@ const loginWithFacebook = (req, res) => {
   return getFacebookProfile(req.body.token)
     .then(profile => {
       profile = profile.body;
+      console.log(profile);
       let profileImage = '';
       if (!(profile && profile.email)) {
         return Promise.reject({ message: 'facebook id is unavailable' });

@@ -27,13 +27,37 @@
     <script src="/scripts/main.js"></script>
   </head>
   <body>
+    <script>
+      window.fbAsyncInit = function() {
+        FB.init({
+          appId      : '290151501335387',
+          xfbml      : true,
+          version    : 'v2.6'
+        });
+      };
+
+      (function(d, s, id){
+         var js, fjs = d.getElementsByTagName(s)[0];
+         if (d.getElementById(id)) {return;}
+         js = d.createElement(s); js.id = id;
+         js.src = "//connect.facebook.net/en_US/sdk.js";
+         fjs.parentNode.insertBefore(js, fjs);
+       }(document, 'script', 'facebook-jssdk'));
+    </script>
     <div class="btn btn-primary btn-participate">ร่วมส่งกำลังใจ</div>
     <div id="threejs" class="hero">
       <div class="hero-overlay">
         <div class="hero-text">
           <h2><div>ศิษย์เก่า CP</div><div>ขอร่วมส่งกำลังใจให้</div></h2>
           <h1><div>พี่พเยาว์</div><div>:))</div></h1>
+          <div
+            class="fb-like"
+            data-share="false"
+            data-width="10"
+            data-show-faces="false">
+          </div>
         </div>
+        
       </div>
     </div>
     <section id="cards">
@@ -61,22 +85,22 @@
         </div>
       </div>
     </section>
-    <section class="lightbox-container" style="display: none">
+    <section class="lightbox-container lightbox-participate" style="display:none;">
       <div class="wrapper">
       <div class="lightbox">
         <div class="btn-close">X</div>
         <div class="lightbox-header">ร่วมส่งกำลังใจ</div>
           <div class="form-control">
             <label>ชื่อ</label>
-            <input type="text">
+            <input type="text" class="input-name">
           </div>
           <div class="form-control">
             <label>รุ่น CP / หน่วยงาน</label>
-            <input type="text">
+            <input type="text" class="input-affiliation">
           </div>
           <div class="form-control">
             <label>ถ้อยคำอวยพร</label>
-            <textarea></textarea>
+            <textarea class="input-message"></textarea>
           </div>
           <div class="form-control">
             <label>ภาพ (ถ้ามี)</label>
@@ -84,7 +108,7 @@
               <span>เลือกภาพ</span>
             </div>
           </div>
-          <div class="btn btn-primary">
+          <div class="btn btn-primary btn-post">
             <span>ส่งกำลังใจ</span>
           </div>
         </div>
