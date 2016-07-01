@@ -228,16 +228,44 @@ $(document).ready(function(){
   }
 
   // Utils
-  convertToBase64 = function(inputFile, callback){
-    var reader = new FileReader();
-    reader.onload = function(e) {
-      callback(e.target.result)
-    };
-    reader.onerror = function(e) {
-      callback(null);
-    };
-    reader.readAsDataURL(inputFile);
-  };
+  // convertToBase64 = function(inputFile, callback){
+  //   var reader = new FileReader();
+  //   reader.onload = function(e) {
+  //     callback(e.target.result)
+  //   };
+  //   reader.onerror = function(e) {
+  //     callback(null);
+  //   };
+  //   reader.readAsDataURL(inputFile);
+  // };
+
+  function getImage(inputFile, callback) {
+    return new Promise(resolve => {
+      file.reader = new FileReader();
+      file.reader.readAsDataURL(file);
+      file.reader.onload = encode => {
+        file.img = new Image();
+        file.img.src = encode.target.result;
+        file.canvas = document.createElement('canvas');
+        file.canvas.width = file.img.width;
+        file.canvas.height = file.img.height;
+
+        if (file.canvas.width > 1280) {
+          file.canvas.width = 1280;
+          file.canvas.height = file.img.height / (file.img.width / 1280);
+        } else if (file.canvas.height > 1280) {
+          file.canvas.width = file.img.width / (file.img.height / 1280);
+          file.canvas.height = 1280;
+        }
+
+        file.context = file.canvas.getContext('2d');
+        file.context.drawImage(file.img, 0, 0, file.canvas.width, file.canvas.height);
+        file.imageType = _.last(file.type.split('/'));
+
+        callback(file.canvas.toDataURL(`image/${file.imageType}`));
+      };
+    });
+  }
 
 
    // req.checkBody('image', 'Invalid Image').optional().isBase64();
@@ -306,7 +334,7 @@ $(document).ready(function(){
     $('.input-file').on('change', function(){
       console.log(this.files);
       var selectedFile = this.files[0];
-      convertToBase64(selectedFile, function(base64){
+      getImage(selectedFile, function(base64){
         //console.log(base64);
         inputBase64 = base64;
       });
@@ -337,20 +365,21 @@ $(document).ready(function(){
   });
 
   $('.btn-post').click(function(){
-    if (!$('.input-name').val()) {
+    var nameExists = $('.input-name').val();
+    if (!nameExists) {
       $('.input-name').siblings('label').addClass('required');
-      return;
     } else {
       $('.input-name').siblings('label').removeClass('required');
     }
 
-    if (!$('.input-message').val()) {
+    var messageExists = $('.input-message').val();
+    if (!messageExists) {
       $('.input-message').siblings('label').addClass('required');
-      return;
     } else {
       $('.input-message').siblings('label').removeClass('required');
     }
 
+    if (!nameExists || !messageExists) return;
     getWellSoonService.sendMessage(
       {
         'title': $('.input-name').val(),
