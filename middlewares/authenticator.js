@@ -6,7 +6,7 @@ const AccessToken = require('../models/accessToken');
 module.exports = {
   authenticate: () => (
     (req, res, next) => {
-      const accessToken = req.query.accessToken || req.body.accessToken;
+      const accessToken = req.query.accessToken || req.body.accessToken || req.get('accesstoken');
 
       req.currentUserId = null;
       req.currentUser = null;
