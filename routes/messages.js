@@ -1,5 +1,3 @@
-'use strict';
-
 // const request = require('superagent');
 const Router = require('express').Router;
 const Message = require('../models/message');
@@ -10,22 +8,34 @@ const fs = Promise.promisifyAll(require('fs'));
 
 const router = new Router();
 
-router.get('/', (req, res) => (
-  Message.find({ _id: { $lt: req.query.lastId } })
-    .limit(30)
+router.get('/', (req, res) => {
+
+  const limit = 30
+
+  let query = {};
+  if(req.query.lastId){
+    query._id = { $lt: req.query.lastId };
+  }
+
+  Message.find( query )
+    .limit(limit)
     .populate('user')
     .sort({ _id: -1 })
     .exec((err, messages) => {
       if (err) {
         res.status(500).send({ error: err });
       } else {
+        let next = null;
+        if(messages.length >= limit) {
+          next = messages[messages.length - 1]._id;
+        }
         res.status(200).send({
           messages,
-          next: messages[messages.length - 1]._id,
+          next
         });
       }
     })
-));
+});
 
 router.post('/', (req, res) => {
   req.checkBody('image', 'Invalid Image').notEmpty().isBase64();
