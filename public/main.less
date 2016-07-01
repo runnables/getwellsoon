@@ -117,19 +117,21 @@ body {
       width: 100%;
       display: inherit;
     }
+    &.type1 { .card-body, .card-footer .info .user-description { color: #4a90e2; }}
+    &.type2 { .card-body, .card-footer .info .user-description { color: #f5a623; }}
+    &.type3 { .card-body, .card-footer .info .user-description { color: #ff0089; }}
+    &.type4 { .card-body, .card-footer .info .user-description { color: #9013fe; }}
     .card-body {
       padding: 10px;
-      color: #333;
-      font-size: 13px;
-      line-height: 17px;
-      word-wrap: break-word;
+      font-size: 36px;
+      font-weight: 500;
     }
     .card-footer {
-      border-top: 1px solid #e7e7e7;
+      text-align: right;
       padding: 10px;
       img {
-        width: 30px;
-        height: 30px;
+        width: 60px;
+        height: 60px;
         .border-radius(50%);
         display: inline-block;
         vertical-align: top;
@@ -143,7 +145,8 @@ body {
           overflow: hidden;
           text-overflow: ellipsis;
           color: #555;
-          line-height: 15px;
+          line-height: 30px;
+          font-size: 20px;
         }
         .user-title { font-weight: bold; }
         .user-description { display: block; font-weight: normal; }
@@ -196,6 +199,7 @@ body {
       input[type="text"], textarea {
         width: 100%;
         font-size: 16px;
+        text-indent: 10px;
         background-color: #fff;
         border: 1px solid @color-border;
         .border-radius(4px);
