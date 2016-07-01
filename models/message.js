@@ -10,6 +10,7 @@ const schema = new mongoose.Schema({
   title: { type: String },
   detail: { type: String },
   imagePath: { type: String },
+  affiliation: { type: String },
 });
 
 schema.index({ _id: 1 });
