@@ -29,11 +29,11 @@
       <div class="cards-header">จากใจศิษย์เก่า</div>
       <div class="container" data-masonry='{ "itemSelector": ".grid-item" }'>
         <div class="grid">
-          <% for(var i = 0; i < 100; i++) { %>
+          <% messages.forEach(function(message) { %>
             <div class="grid-item">
               <div class="card">
 
-                <img src="https://www.sparklabs.com/forum/styles/comboot/theme/images/default_avatar.jpg"/>
+                <img src="<%= message.imagePath%>"/>
                 <div class="card-body">
                   Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
                 </div>
@@ -46,7 +46,35 @@
                 </div>
               </div>
             </div>
-          <% }%>
+          <% });%>
+        </div>
+      </div>
+    </section>
+    <section class="lightbox-container">
+      <div class="wrapper">
+      <div class="lightbox">
+        <div class="lightbox-header">ร่วมส่งกำลังใจ</div>
+          <div class="form-control">
+            <label>ชื่อ</label>
+            <input type="text">
+          </div>
+          <div class="form-control">
+            <label>รุ่น CP / หน่วยงาน</label>
+            <input type="text">
+          </div>
+          <div class="form-control">
+            <label>ถ้อยคำอวยพร</label>
+            <textarea></textarea>
+          </div>
+          <div class="form-control">
+            <label>ภาพ (ถ้ามี)</label>
+            <div class="btn btn-secondary">
+              <span>เลือกภาพ</span>
+            </div>
+          </div>
+          <div class="btn btn-primary">
+            <span>ส่งกำลังใจ</span>
+          </div>
         </div>
       </div>
     </section>

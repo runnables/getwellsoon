@@ -12,8 +12,8 @@ const errorHandler = require('./middlewares/errorHandler');
 const routes = require('./routes');
 const cors = require('cors');
 const path = require('path');
+const _ = require('lodash');
 global.basePath = path.resolve(__dirname);
-
 
 const app = express();
 app.set('view engine', 'ejs');
@@ -33,8 +33,19 @@ app.use(expressValidator({
 app.use(authenticator.authenticate());
 app.use(express.static(__dirname + '/public'));
 
+const Message = require('./models/message');
 app.get('/', (req, res) => {
-  res.render('index');
+  Message.find().limit(30)
+  .populate('user').sort({ _id: -1 })
+  .then(messages => {
+    res.render('index', {
+      messages: messages,
+      next: messages.length ? _.last(messages)._id : null
+    });
+  })
+  .catch(err => {
+    res.render('index');
+  });
 });
 
 app.use('/users', routes.users);
