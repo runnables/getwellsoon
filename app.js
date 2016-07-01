@@ -35,6 +35,11 @@ app.use(express.static(__dirname + '/public'));
 
 const Message = require('./models/message');
 app.get('/', (req, res) => {
+  const fs = require('fs');
+  fs.readdir('./public/thumbnails', (err, stats) => {
+    console.log('stats', stats);
+  });
+
   Message.find().limit(30)
   .populate('user').sort({ _id: -1 })
   .then(messages => {
