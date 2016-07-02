@@ -159,7 +159,7 @@ $(document).ready(function(){
     document.addEventListener( 'mousemove', onDocumentMouseMove, false );
     //
     window.addEventListener( 'resize', onWindowResize, false );
-    
+
     $(window).scroll(function() {
       if ($(window).scrollTop() + $(window).height() >= $(document).height() - 300 && !$('#lock').val() && $('#next').val()) {
         $('#lock').val('true');
@@ -394,12 +394,6 @@ $(document).ready(function(){
     }
 
     if (!nameExists || !messageExists) return;
-    console.log({
-      'title': $('.input-name').val(),
-      'detail': $('.input-message').val(),
-      'affiliation': $('.input-affiliation').val(),
-      'image': inputBase64
-    });
     getWellSoonService.sendMessage(
       {
         'title': $('.input-name').val(),
@@ -418,6 +412,7 @@ $(document).ready(function(){
         }).children().html());
         var msnry = new Masonry( '.grid', { itemSelector: '.grid-item' });
         hideLightbox();
+        $.smoothScroll({ scrollTarget: '#cards' });
       });
   });
 
