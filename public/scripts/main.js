@@ -8,9 +8,8 @@ $(document).ready(function(){
       PI2 = Math.PI * 2;
 
   var $grid = $('.grid');
-  var masonryGrid = $grid.masonry({
-    itemSelector: '.grid-item',
-    columnWidth: 200
+  $('.grid').masonry({
+    itemSelector: '.grid-item'
   });
 
   var fbLoggedIn = false;
@@ -317,17 +316,13 @@ $(document).ready(function(){
       profileImage: (message.user || {}).profileImage
     }).children();
 
-    console.log($elem.children());
     if(opts.prepend){
-      $grid.prepend($elem.children())
-        .masonry('appended', ($elem.children()));
-
+      $('.grid').prepend($elem)
+        .masonry('prepended', $elem);
     }else{
-      $grid.append($elem.children())
-        .masonry('appended', ($elem.children()));
+      $('.grid').append($elem)
+        .masonry('appended', $elem);
     }
-    
-    
     //masonryGrid.appended($elem[0]);
   }
 
@@ -502,7 +497,7 @@ $(document).ready(function(){
     });
     //var msnry = new Masonry( '.grid', { itemSelector: '.grid-item' });
     //masonryGrid.layout();
-    $grid.masonry('layout');
+    $('.grid').masonry('layout');
   }
 
 
