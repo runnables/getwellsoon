@@ -28,7 +28,6 @@ $(document).ready(function(){
     camera.position.set( 0, 300, 500 );
     scene = new THREE.Scene();
 
-    //scene.fog = new THREE.Fog( 0x000000, 1, 1000 );
     var textureLoader = new THREE.TextureLoader();
 
     const thumbnails = [
@@ -135,7 +134,6 @@ $(document).ready(function(){
       scene.add(particle);
     }
 
-    //
     raycaster = new THREE.Raycaster();
     mouse = new THREE.Vector2();
     renderer = new THREE.WebGLRenderer();
@@ -157,9 +155,14 @@ $(document).ready(function(){
     composer.addPass( effect );
 
     document.addEventListener( 'mousemove', onDocumentMouseMove, false );
-    //
     window.addEventListener( 'resize', onWindowResize, false );
 
+    $('body').on('focusin', 'input, textarea', function(event) {
+      if(navigator.userAgent.indexOf('Android') > -1 && ...){
+       var scroll = $(this).offset();
+       window.scrollTo(0, scroll);
+     }
+    });
     $(window).scroll(function() {
       if ($(window).scrollTop() + $(window).height() >= $(document).height() - 300 && !$('#lock').val() && $('#next').val()) {
         $('#lock').val('true');
@@ -228,21 +231,8 @@ $(document).ready(function(){
       if ( INTERSECTED ) INTERSECTED.material.program = programStroke;
       INTERSECTED = null;
     }
-    //renderer.render( scene, camera );
     composer.render();
   }
-
-  // Utils
-  // convertToBase64 = function(inputFile, callback){
-  //   var reader = new FileReader();
-  //   reader.onload = function(e) {
-  //     callback(e.target.result)
-  //   };
-  //   reader.onerror = function(e) {
-  //     callback(null);
-  //   };
-  //   reader.readAsDataURL(inputFile);
-  // };
 
   function getImage(file, callback) {
     file.reader = new FileReader();
@@ -270,15 +260,9 @@ $(document).ready(function(){
     };
   }
 
-
-   // req.checkBody('image', 'Invalid Image').optional().isBase64();
-   //  req.checkBody('title', 'Title us required').notEmpty();
-   //  req.checkBody('detail', 'detail is required').notEmpty();
-   //  req.checkBody('affiliation', 'affiliation is required').optional();
-
-   /**
-    * Callbacks
-    */
+  /**
+  * Callbacks
+  */
 
   var fbLoggedIn = false;
   var fbAccessToken, inputBase64;
@@ -425,7 +409,6 @@ $(document).ready(function(){
     // app know the current login status of the person.
     // Full docs on the response object can be found in the documentation
     // for FB.getLoginStatus().
-    console.log(response);
     if (response.status === 'connected') {
       // Logged into your app and Facebook.
       fbLoggedIn = true;
