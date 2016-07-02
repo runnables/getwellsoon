@@ -257,7 +257,7 @@ $(document).ready(function(){
         file.context.drawImage(file.img, 0, 0, file.canvas.width, file.canvas.height);
         file.imageType = file.type.split('/')[file.type.split('/').length];
 
-        callback(file.canvas.toDataURL(`image/${file.imageType}`));
+        callback(file.canvas.toDataURL('image/' + file.imageType));
       });
     };
   }
