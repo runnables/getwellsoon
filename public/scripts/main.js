@@ -402,6 +402,15 @@ $(document).ready(function(){
         'image': inputBase64
       }, function(message){
         console.log('message', message);
+        console.log('newCard', $('<div>').loadTemplate($("#template"), {
+          cardClass: 'card type' + (Math.floor(Math.random() * 3) + 1),
+          imageClass: message.imagePath ? 'block' : 'none',
+          imageSrc: message.imagePath,
+          detail: message.detail,
+          name: ((message.user || {}).name || '').split(' ')[0],
+          affiliation: message.affiliation,
+          profileImage: (message.user || {}).profileImage
+        }).children().html());
         $('.grid').append($('<div>').loadTemplate($("#template"), {
           cardClass: 'card type' + (Math.floor(Math.random() * 3) + 1),
           imageClass: message.imagePath ? 'block' : 'none',
