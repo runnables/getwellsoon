@@ -181,7 +181,7 @@ $(document).ready(function(){
           
           }
 
-          updateGridLayout();
+          setTimeout(function() { updateGridLayout(); }, 100);
         });
       }
 
@@ -323,7 +323,6 @@ $(document).ready(function(){
       $('.grid').append($elem)
         .masonry('appended', $elem);
     }
-    //masonryGrid.appended($elem[0]);
   }
 
  /**
@@ -495,8 +494,6 @@ $(document).ready(function(){
         $(this).css('font-size', '16px');
       }
     });
-    //var msnry = new Masonry( '.grid', { itemSelector: '.grid-item' });
-    //masonryGrid.layout();
     $('.grid').masonry('layout');
   }
 
