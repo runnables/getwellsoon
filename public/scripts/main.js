@@ -157,13 +157,6 @@ $(document).ready(function(){
     document.addEventListener( 'mousemove', onDocumentMouseMove, false );
     window.addEventListener( 'resize', onWindowResize, false );
 
-    $('body').on('focusin', 'input, textarea', function(event) {
-      console.log('userAgent', navigator.userAgent);
-      if(navigator.userAgent.indexOf('Android') > -1){
-       var scroll = $(this).offset();
-       window.scrollTo(0, scroll);
-     }
-    });
     $(window).scroll(function() {
       if ($(window).scrollTop() + $(window).height() >= $(document).height() - 300 && !$('#lock').val() && $('#next').val()) {
         $('#lock').val('true');
@@ -348,6 +341,16 @@ $(document).ready(function(){
 
   $('.btn-image').click(function() {
     $('.input-file').click();
+  });
+
+  $('.input-name').focusin(function() {
+    $.smoothScroll({ scrollElement: $('.lightbox'), scrollTarget: '#label-name' });
+  });
+  $('.input-affiliation').focusin(function() {
+    $.smoothScroll({ scrollElement: $('.lightbox'), scrollTarget: '#label-affiliation' });
+  });
+  $('.input-message').focusin(function() {
+    $.smoothScroll({ scrollElement: $('.lightbox'), scrollTarget: '#label-message' });
   });
 
   $('.input-file').on('change', function(){
