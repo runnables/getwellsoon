@@ -178,7 +178,7 @@ $(document).ready(function(){
 
             //$('.grid').append();
             //var msnry = new Masonry( '.grid', { itemSelector: '.grid-item' });
-          
+
           }
 
           setTimeout(function() { updateGridLayout(); }, 100);
@@ -236,25 +236,29 @@ $(document).ready(function(){
     file.reader = new FileReader();
     file.reader.readAsDataURL(file);
     file.reader.onload = function(encode) {
-      file.img = new Image();
-      file.img.src = encode.target.result;
-      file.canvas = document.createElement('canvas');
-      file.canvas.width = file.img.width;
-      file.canvas.height = file.img.height;
 
-      if (file.canvas.width > 1280) {
-        file.canvas.width = 1280;
-        file.canvas.height = file.img.height / (file.img.width / 1280);
-      } else if (file.canvas.height > 1280) {
-        file.canvas.width = file.img.width / (file.img.height / 1280);
-        file.canvas.height = 1280;
-      }
+      $('#display-image').attr('src', encode.target.result).load(function() {
+        file.img = new Image();
+        file.img.src = encode.target.result;
+        file.canvas = document.createElement('canvas');
+        file.canvas.width = this.width;
+        file.canvas.height = this.height;
 
-      file.context = file.canvas.getContext('2d');
-      file.context.drawImage(file.img, 0, 0, file.canvas.width, file.canvas.height);
-      file.imageType = file.type.split('/')[file.type.split('/').length];
+        if (file.canvas.width > 1280) {
+          file.canvas.width = 1280;
+          file.canvas.height = file.img.height / (file.img.width / 1280);
+        } else if (file.canvas.height > 1280) {
+          file.canvas.width = file.img.width / (file.img.height / 1280);
+          file.canvas.height = 1280;
+        }
 
-      callback(file.canvas.toDataURL(`image/${file.imageType}`));
+
+        file.context = file.canvas.getContext('2d');
+        file.context.drawImage(file.img, 0, 0, file.canvas.width, file.canvas.height);
+        file.imageType = file.type.split('/')[file.type.split('/').length];
+
+        callback(file.canvas.toDataURL(`image/${file.imageType}`));
+      });
     };
   }
 
