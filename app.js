@@ -34,13 +34,17 @@ app.use(authenticator.authenticate());
 app.use(express.static(__dirname + '/public'));
 
 const Message = require('./models/message');
+const User = require('./models/user');
 app.get('/', (req, res) => {
-  Message.find().limit(30)
-  .populate('user').sort({ _id: -1 })
-  .then(messages => {
+  Promise.all([
+    User.find().limit(300).select('profileImage'),
+    Message.find().limit(30).populate('user').sort({ _id: -1 })
+  ])
+  .then(values => {
     res.render('index', {
-      messages: messages,
-      next: messages.length ? _.last(messages)._id : null
+      thumbnails: _.map(values[0], 'profileImage'),
+      messages: values[1],
+      next: values[1].length ? _.last(values[1])._id : null
     });
   })
   .catch(err => {

@@ -79,6 +79,7 @@
     <div class="btn btn-primary btn-participate">ร่วมส่งกำลังใจ</div>
     <input type="hidden" id="next" value="<%=next%>">
     <input type="hidden" id="lock" value="">
+    <input type="hidden" id="thumbnails" value="<%=JSON.stringify(thumbnails)%>">
     <div id="threejs" class="hero">
       <div class="hero-overlay">
         <div class="hero-text">
@@ -118,7 +119,7 @@
         <div class="lightbox-header">ร่วมส่งกำลังใจ</div>
           <div class="form-control">
             <label id="label-name">ชื่อ*</label>
-            <input type="text" class="input-name">
+            <input type="text" class="input-name" disabled>
           </div>
           <div class="form-control">
             <label id="label-affiliation">รุ่น CP / หน่วยงาน</label>

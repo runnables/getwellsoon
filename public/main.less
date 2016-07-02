@@ -150,7 +150,7 @@ body {
       .info {
         display: inline-block;
         vertical-align: top;
-        width: 160px;
+        width: ~"calc(100% - 60px)";
         margin-right: 5px;
 
         .user-title, .user-description {
@@ -219,7 +219,6 @@ body {
       input[type="text"], textarea {
         width: 100%;
         font-size: 16px;
-        text-indent: 10px;
         background-color: #fff;
         border: 1px solid @color-border;
         outline-color: @color-pink;
@@ -227,8 +226,10 @@ body {
         font-family: 'Mitr', sans-serif;
         padding: 0;
       }
-      input[type="text"] { height: 36px; }
-      textarea { height: 90px; resize: none; padding-top: 10px; padding-bottom: 10px; }
+      input[type="text"] { height: 36px; text-indent: 10px; }
+      @textareaWidth: 100% - 20px;
+      textarea { height: 90px; resize: none; padding: 10px; width: ~"calc(100% - 20px)"; }
+      .input-name { background-color: #eee !important; }
     }
   }
 
