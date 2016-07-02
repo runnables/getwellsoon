@@ -168,9 +168,7 @@ $(document).ready(function(){
           for (var i = 0; i < data.messages.length; i++) {
             var message = data.messages[i];
             $('.grid').append($('<div>').loadTemplate($("#template"), {
-              //cardClass: 'card type' + (Math.floor(Math.random() * 4) + 1),
               cardClass: 'card type' + (Math.floor(Math.random() * 3) + 1),
-              //cardClass: 'card',
               imageClass: message.imagePath ? 'block' : 'none',
               imageSrc: message.imagePath,
               detail: message.detail,
@@ -402,7 +400,17 @@ $(document).ready(function(){
         'detail': $('.input-message').val(),
         'affiliation': $('.input-affiliation').val(),
         'image': inputBase64
-      }, function(data){
+      }, function(message){
+        $('.grid').append($('<div>').loadTemplate($("#template"), {
+          cardClass: 'card type' + (Math.floor(Math.random() * 3) + 1),
+          imageClass: message.imagePath ? 'block' : 'none',
+          imageSrc: message.imagePath,
+          detail: message.detail,
+          name: ((message.user || {}).name || '').split(' ')[0],
+          affiliation: message.affiliation,
+          profileImage: (message.user || {}).profileImage
+        }).children().html());
+        var msnry = new Masonry( '.grid', { itemSelector: '.grid-item' });
         hideLightbox();
       });
   });
