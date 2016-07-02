@@ -14,8 +14,8 @@
 
     <link href="https://fonts.googleapis.com/css?family=Mitr:400,500&subset=thai" rel="stylesheet"></link>
     <link rel="stylesheet" type="text/css" href="/main.min.css?v=1"></link>
-    <script src="https://npmcdn.com/masonry-layout@4.1/dist/masonry.pkgd.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+    <script src="https://npmcdn.com/masonry-layout@4.1/dist/masonry.pkgd.min.js"></script>
     <script src="/scripts/jquery.smooth-scroll.min.js"></script>
     <script src="/scripts/jquery.loadTemplate.min.js"></script>
     <script src="/scripts/three.js"></script>
@@ -90,8 +90,8 @@
     </div>
     <section id="cards">
       <div class="cards-header">จากใจศิษย์เก่า</div>
-      <div class="container" data-masonry='{ "itemSelector": ".grid-item" }'>
-        <div class="grid">
+      <div class="container">
+        <div class="grid" data-masonry='{ "itemSelector": ".grid-item" }'>
           <% messages.forEach(function(message) { %>
             <div class="grid-item">
               <div class="card type<%= 1 + Math.floor(Math.random() * 3)%>">

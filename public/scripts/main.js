@@ -7,6 +7,16 @@ $(document).ready(function(){
       composer, mouse, shouldRender = true;
       PI2 = Math.PI * 2;
 
+  var $grid = $('.grid');
+  var masonryGrid = $grid.masonry({
+    itemSelector: '.grid-item',
+    columnWidth: 200
+  });
+
+  var fbLoggedIn = false;
+  var fbAccessToken, inputBase64;
+  var loadingSpinner = 'loading...';
+
 
   var programFill = function(context) {
     context.beginPath();
@@ -165,16 +175,11 @@ $(document).ready(function(){
           $('#next').val(data.next);
           for (var i = 0; i < data.messages.length; i++) {
             var message = data.messages[i];
-            $('.grid').append($('<div>').loadTemplate($("#template"), {
-              cardClass: 'card type' + (Math.floor(Math.random() * 3) + 1),
-              imageClass: message.imagePath ? 'block' : 'none',
-              imageSrc: message.imagePath,
-              detail: message.detail,
-              name: ((message.user || {}).name || '').split(' ')[0],
-              affiliation: message.affiliation,
-              profileImage: (message.user || {}).profileImage
-            }).children().html());
-            var msnry = new Masonry( '.grid', { itemSelector: '.grid-item' });
+            addMessageCard(message);
+
+            //$('.grid').append();
+            //var msnry = new Masonry( '.grid', { itemSelector: '.grid-item' });
+          
           }
 
           updateGridLayout();
@@ -255,12 +260,8 @@ $(document).ready(function(){
   }
 
   /**
-  * Callbacks
-  */
-
-  var fbLoggedIn = false;
-  var fbAccessToken, inputBase64;
-  var loadingSpinner = 'loading...';
+   * jQuery Inits
+   */
 
   var getWellSoonService = {
     authenticateUser: function(params, callback) {
@@ -284,6 +285,9 @@ $(document).ready(function(){
     }
   };
 
+  /**
+   * Private Functions
+   */
   function showLightbox() {
     $('.btn-participate').addClass('hidden');
     $('.lightbox-participate').css('display', 'table');
@@ -300,6 +304,36 @@ $(document).ready(function(){
     $('body').removeAttr('style');
   }
 
+  function addMessageCard(message, opts){
+    opts = opts || {};
+
+    var $elem = $('<div>').loadTemplate($("#template"), {
+      cardClass: 'card type' + (Math.floor(Math.random() * 3) + 1),
+      imageClass: message.imagePath ? 'block' : 'none',
+      imageSrc: message.imagePath,
+      detail: message.detail,
+      name: ((message.user || {}).name || '').split(' ')[0],
+      affiliation: message.affiliation,
+      profileImage: (message.user || {}).profileImage
+    }).children();
+
+    console.log($elem.children());
+    if(opts.prepend){
+      $grid.prepend($elem.children())
+        .masonry('appended', ($elem.children()));
+
+    }else{
+      $grid.append($elem.children())
+        .masonry('appended', ($elem.children()));
+    }
+    
+    
+    //masonryGrid.appended($elem[0]);
+  }
+
+ /**
+  * Callbacks
+  */
   $('.btn-participate').click(function(){
     if ($('.btn-participate').hasClass('disabled')) { return false; }
     $('.btn-participate').addClass('disabled');
@@ -389,16 +423,20 @@ $(document).ready(function(){
         'affiliation': $('.input-affiliation').val(),
         'image': inputBase64
       }, function(message){
-        $('.grid').prepend($('<div>').loadTemplate($("#template"), {
-          cardClass: 'card type' + (Math.floor(Math.random() * 3) + 1),
-          imageClass: message.imagePath ? 'block' : 'none',
-          imageSrc: message.imagePath,
-          detail: message.detail,
-          name: ((message.user || {}).name || '').split(' ')[0],
-          affiliation: message.affiliation,
-          profileImage: (message.user || {}).profileImage
-        }).children().html());
-        var msnry = new Masonry( '.grid', { itemSelector: '.grid-item' });
+        // $('.grid').prepend($('<div>').loadTemplate($("#template"), {
+        //   cardClass: 'card type' + (Math.floor(Math.random() * 3) + 1),
+        //   imageClass: message.imagePath ? 'block' : 'none',
+        //   imageSrc: message.imagePath,
+        //   detail: message.detail,
+        //   name: ((message.user || {}).name || '').split(' ')[0],
+        //   affiliation: message.affiliation,
+        //   profileImage: (message.user || {}).profileImage
+        // }).children().html());
+        // var msnry = new Masonry( '.grid', { itemSelector: '.grid-item' });
+
+        addMessageCard(message, {prepend: true});
+        setTimeout(function(){ updateGridLayout(); },  500);
+
         hideLightbox();
         $.smoothScroll({ scrollTarget: '#cards' });
       });
@@ -462,7 +500,9 @@ $(document).ready(function(){
         $(this).css('font-size', '16px');
       }
     });
-    var msnry = new Masonry( '.grid', { itemSelector: '.grid-item' });
+    //var msnry = new Masonry( '.grid', { itemSelector: '.grid-item' });
+    //masonryGrid.layout();
+    $grid.masonry('layout');
   }
 
 
@@ -476,7 +516,7 @@ $(document).ready(function(){
     fjs.parentNode.insertBefore(js, fjs);
   }(document, 'script', 'facebook-jssdk'));
 
-  updateGridLayout();
+  setTimeout(function(){ updateGridLayout(); },  1000);
   init();
   animate();
 
