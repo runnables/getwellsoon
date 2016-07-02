@@ -4,7 +4,7 @@ $(document).ready(function(){
 
   var container, stats,
       camera, scene, renderer, raycaster,
-      composer, mouse,
+      composer, mouse, shouldRender = true;
       PI2 = Math.PI * 2;
 
 
@@ -159,6 +159,7 @@ $(document).ready(function(){
     document.addEventListener( 'mousemove', onDocumentMouseMove, false );
     //
     window.addEventListener( 'resize', onWindowResize, false );
+    
     $(window).scroll(function() {
       if ($(window).scrollTop() + $(window).height() >= $(document).height() - 300 && !$('#lock').val() && $('#next').val()) {
         $('#lock').val('true');
@@ -184,6 +185,9 @@ $(document).ready(function(){
           updateGridLayout();
         });
       }
+
+      shouldRender = $(window).scrollTop() < $(window).height();
+
     });
   }
   function onWindowResize() {
@@ -199,8 +203,9 @@ $(document).ready(function(){
   //
   function animate() {
     requestAnimationFrame( animate );
-    render();
-    stats.update();
+    if(shouldRender){
+      render();
+    }
   }
   var radius = 600;
   var theta = 0;
