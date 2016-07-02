@@ -2,12 +2,12 @@
 
 $(document).ready(function(){
 
-  var container, stats;
-  var camera, scene, renderer;
-  var raycaster;
-  var composer;
-  var mouse;
-  var PI2 = Math.PI * 2;
+  var container, stats,
+      camera, scene, renderer, raycaster,
+      composer, mouse,
+      PI2 = Math.PI * 2;
+
+
   var programFill = function(context) {
     context.beginPath();
     context.arc( 0, 0, 0.5, 0, PI2, true);
@@ -180,6 +180,8 @@ $(document).ready(function(){
             }).children().html());
             var msnry = new Masonry( '.grid', { itemSelector: '.grid-item' });
           }
+
+          updateGridLayout();
         });
       }
     });
@@ -452,7 +454,22 @@ $(document).ready(function(){
 
   };
 
-  // Load the SDK asynchronously
+  function updateGridLayout(){
+    $('.card-body').each(function(){
+      if($(this).html().length < 10){
+        $(this).css('font-size', '36px');
+      } else if($(this).html().length < 40) {
+        $(this).css('font-size', '24px');
+      }else {
+        $(this).css('font-size', '16px');
+      }
+    });
+    var msnry = new Masonry( '.grid', { itemSelector: '.grid-item' });
+  }
+  
+
+  // Initialization Code
+    // Load the SDK asynchronously
   (function(d, s, id) {
     var js, fjs = d.getElementsByTagName(s)[0];
     if (d.getElementById(id)) return;
@@ -461,18 +478,7 @@ $(document).ready(function(){
     fjs.parentNode.insertBefore(js, fjs);
   }(document, 'script', 'facebook-jssdk'));
 
-  $('.card-body').each(function(){
-    if($(this).html().length < 10){
-      $(this).css('font-size', '36px');
-    } else if($(this).html().length < 40) {
-      $(this).css('font-size', '24px');
-    }else {
-      $(this).css('font-size', '16px');
-    }
-
-  });
-
-  // Initialization Code
+  updateGridLayout();
   init();
   animate();
 
