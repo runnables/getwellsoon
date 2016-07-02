@@ -279,6 +279,7 @@ $(document).ready(function(){
 
   var fbLoggedIn = false;
   var fbAccessToken, inputBase64;
+  var loadingSpinner = 'loading...';
 
   var getWellSoonService = {
     authenticateUser: function(params, callback) {
@@ -322,7 +323,7 @@ $(document).ready(function(){
 
     var authenticateUser = function (){
       var text = $('.btn-participate').html();
-      $('.btn-participate').html('. . .');
+      $('.btn-participate').html(loadingSpinner);
       getWellSoonService.authenticateUser({ token: fbAccessToken }, function(data){
         showLightbox();
         $('.btn-participate').removeClass('disabled');
@@ -335,7 +336,7 @@ $(document).ready(function(){
       authenticateUser();
     } else {
       var text = $('.btn-participate').html();
-      $('.btn-participate').html('. . .');
+      $('.btn-participate').html(loadingSpinner);
       FB.login(function(response) {
         $('.btn-participate').html(text);
         $('.btn-participate').removeClass('disabled');
@@ -364,7 +365,7 @@ $(document).ready(function(){
     $('.btn-image').addClass('disabled');
     var selectedFile = this.files[0];
     var text = $('.btn-image').html();
-    $('.btn-image').html('. . .');
+    $('.btn-image').html(loadingSpinner);
     getImage(selectedFile, function(base64){
       $('.btn-image').html(text);
       $('.btn-image').removeClass('disabled');
