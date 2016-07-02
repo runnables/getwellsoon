@@ -41,7 +41,7 @@ router.get('/', (req, res) => {
 
 router.post('/', (req, res) => {
   if (req.currentUser) {
-    req.checkBody('image', 'Invalid Image').optional().isBase64();
+    // req.checkBody('image', 'Invalid Image').optional().isBase64();
     req.checkBody('title', 'Title us required').notEmpty();
     req.checkBody('detail', 'detail is required').notEmpty();
     req.checkBody('affiliation', 'affiliation is required').optional();
@@ -64,12 +64,13 @@ router.post('/', (req, res) => {
       user: req.currentUser._id,
     });
 
-    const dir = path.join(global.basePath, 'media', 'messages');
+    const dir = path.join(global.basePath, 'public', 'media', 'messages');
     const coverImagePath = path.join(dir, `${message._id}.jpg`);
 
-
     if (req.body.image) {
-      return fs.writeFileAsync(coverImagePath, req.body.image, 'base64')
+      const imageData = req.body.image.split(';base64');
+      const base64String = imageData[1];
+      return fs.writeFileAsync(coverImagePath, base64String, 'base64')
         .then(() => {
           message.imagePath = `/media/messages/${message._id}.jpg`;
           return message.save();
@@ -78,6 +79,7 @@ router.post('/', (req, res) => {
           res.status(200).send(message)
         ))
         .catch(err => {
+          console.log('image err', err);
           res.status(500).send(err);
         });
     }

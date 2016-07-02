@@ -8,24 +8,10 @@
 @color-border: #979797;
 @color-light-gray: #cccccc;
 
-/*
-@color-type-1: #4a90e2;
-@color-type-2: #7ED321;
-@color-type-3: #ff0089;
-@color-type-4: #9013fe;
-*/
-
 @color-type-1: #FB4BB0;
 @color-type-2: #FA008F;
 @color-type-3: #C70072;
 @color-type-4: #C70072;
-
-/*
-@color-type-1: #999999;
-@color-type-2: #999999;
-@color-type-3: #999999;
-@color-type-4: #999999;
-*/
 
 .border-radius(@px) {
   -webkit-border-radius: @px;
@@ -219,17 +205,22 @@ body {
     }
     .form-control {
       margin-bottom: 20px;
-      label { display: block; font-size: 18px; }
+      label {
+        display: block;
+        font-size: 18px;
+        &.required { color: @color-pink; }
+      }
       input[type="text"], textarea {
         width: 100%;
         font-size: 16px;
         text-indent: 10px;
         background-color: #fff;
         border: 1px solid @color-border;
+        outline-color: @color-pink;
         .border-radius(4px);
       }
       input[type="text"] { height: 36px; }
-      textarea { height: 90px; resize: none; }
+      textarea { height: 90px; resize: none; padding-top: 10px; padding-bottom: 10px; }
     }
   }
 }

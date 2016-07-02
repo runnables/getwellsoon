@@ -105,7 +105,7 @@
         <div class="btn-close">X</div>
         <div class="lightbox-header">ร่วมส่งกำลังใจ</div>
           <div class="form-control">
-            <label>ชื่อ</label>
+            <label>ชื่อ*</label>
             <input type="text" class="input-name">
           </div>
           <div class="form-control">
@@ -113,12 +113,14 @@
             <input type="text" class="input-affiliation">
           </div>
           <div class="form-control">
-            <label>ถ้อยคำอวยพร</label>
+            <label>ถ้อยคำอวยพร*</label>
             <textarea class="input-message"></textarea>
           </div>
           <div class="form-control">
-            <label>ภาพ (ถ้ามี)</label>
-            <input type="file" class="btn btn-secondary input-file" value="เลือกภาพ">
+            <div class="btn btn-secondary btn-image">
+              <span>เลือกภาพ (ถ้ามี)</span>
+            </div>
+            <input class="input-file" type="file" style="display: none">
           </div>
           <div class="btn btn-primary btn-post">
             <span>ส่งกำลังใจ</span>

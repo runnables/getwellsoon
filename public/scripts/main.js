@@ -162,7 +162,7 @@ $(document).ready(function(){
     $(window).scroll(function() {
       if ($(window).scrollTop() + $(window).height() >= $(document).height() - 300 && !$('#lock').val() && $('#next').val()) {
         $('#lock').val('true');
-        $.get('/messages?lastId=' + $('#next').val(), function(data) {
+        getWellSoonService.getMessages($('#next').val(), function(data) {
           $('#lock').val('');
           $('#next').val(data.next);
           for (var i = 0; i < data.messages.length; i++) {
@@ -230,16 +230,42 @@ $(document).ready(function(){
   }
 
   // Utils
-  convertToBase64 = function(inputFile, callback){
-    var reader = new FileReader();
-    reader.onload = function(e) {
-      callback(e.target.result)
+  // convertToBase64 = function(inputFile, callback){
+  //   var reader = new FileReader();
+  //   reader.onload = function(e) {
+  //     callback(e.target.result)
+  //   };
+  //   reader.onerror = function(e) {
+  //     callback(null);
+  //   };
+  //   reader.readAsDataURL(inputFile);
+  // };
+
+  function getImage(file, callback) {
+    file.reader = new FileReader();
+    file.reader.readAsDataURL(file);
+    file.reader.onload = encode => {
+      file.img = new Image();
+      file.img.src = encode.target.result;
+      file.canvas = document.createElement('canvas');
+      file.canvas.width = file.img.width;
+      file.canvas.height = file.img.height;
+
+      if (file.canvas.width > 1280) {
+        file.canvas.width = 1280;
+        file.canvas.height = file.img.height / (file.img.width / 1280);
+      } else if (file.canvas.height > 1280) {
+        file.canvas.width = file.img.width / (file.img.height / 1280);
+        file.canvas.height = 1280;
+      }
+
+      file.context = file.canvas.getContext('2d');
+      file.context.drawImage(file.img, 0, 0, file.canvas.width, file.canvas.height);
+      file.imageType = file.type.split('/')[file.type.split('/').length];
+
+      callback(file.canvas.toDataURL(`image/${file.imageType}`));
     };
-    reader.onerror = function(e) {
-      callback(null);
-    };
-    reader.readAsDataURL(inputFile);
-  };
+  }
 
 
    // req.checkBody('image', 'Invalid Image').optional().isBase64();
@@ -255,59 +281,65 @@ $(document).ready(function(){
   var fbAccessToken, inputBase64;
 
   var getWellSoonService = {
-    authenticateUser: function(params, callback){
+    authenticateUser: function(params, callback) {
       $.post('/users/login', {
         'token': params.token
       }, function(data){
         getWellSoonService.token = data.token;
         callback(data);
       }, 'json');
-    }, sendMessage: function(params, callback){
+    },
+    sendMessage: function(params, callback) {
       if(getWellSoonService.token !== undefined){
         params.accessToken = getWellSoonService.token;
       }
       $.post('/messages', params, function(data){
         callback(data);
       }, 'json');
+    },
+    getMessages: function(lastId, callback) {
+      $.get('/messages?lastId=' + lastId, callback);
     }
   };
 
-  $('.btn-post').click(function(){
-    getWellSoonService.sendMessage(
-      {
-        'title': $('.input-name').val(),
-        'detail': $('.input-message').val(),
-        'affiliation': $('.input-affiliation').val(),
-        'image': inputBase64
-      }, function(data){
-        $('.lightbox-participate').css('display', 'none');
-      });
-   });
+  function showLightbox() {
+    $('.lightbox-participate').css('display', 'table');
+    $('body').css('position', 'fixed');
+    $('body').css('top', '0px');
+    $('body').css('left', '0px');
+    $('body').css('bottom', '0px');
+    $('body').css('right', '0px');
+  }
 
-    $('.btn-close').click(function(){
-      $('.lightbox-participate').css('display', 'none');
-    });
+  function hideLightbox() {
+    $('.lightbox-participate').css('display', 'none');
+    $('body').removeAttr('style');
+  }
 
-   $('.btn-participate').click(function(){
+  $('.btn-participate').click(function(){
+    if ($('.btn-participate').hasClass('disabled')) { return false; }
+    $('.btn-participate').addClass('disabled');
+
     var authenticateUser = function (){
-      getWellSoonService.authenticateUser({token: fbAccessToken}, function(data){
-        $('.lightbox-participate').css('display', 'table');
+      var text = $('.btn-participate').html();
+      $('.btn-participate').html('. . .');
+      getWellSoonService.authenticateUser({ token: fbAccessToken }, function(data){
+        showLightbox();
+        $('.btn-participate').removeClass('disabled');
+        $('.btn-participate').html(text);
+        $('.input-name').val(data.user.name.split(' ')[0]);
       });
     };
 
-    $('.input-file').on('change', function(){
-      console.log(this.files);
-      var selectedFile = this.files[0];
-      convertToBase64(selectedFile, function(base64){
-        //console.log(base64);
-        inputBase64 = base64;
-      });
-    });
-
     if(fbLoggedIn) {
       authenticateUser();
-    }else {
+    } else {
+      var text = $('.btn-participate').html();
+      $('.btn-participate').html('. . .');
       FB.login(function(response) {
+        $('.btn-participate').html(text);
+        $('.btn-participate').removeClass('disabled');
+
         if (response.status === 'connected') {
           fbLoggedIn = true;
           fbAccessToken = response.authResponse.accessToken;
@@ -319,15 +351,63 @@ $(document).ready(function(){
           fbLoggedIn = false;
           fbAccessToken = undefined;
         }
-      },{ scope: 'public_profile' });
+      }, { scope: 'public_profile' });
     }
-   });
+  });
 
-   // FB.logout(function(response) {
-   //      fbLoggedIn = false;
-   //      fbAccessToken = undefined;
-   //      loginAndAuthenticate();
-   //    });
+  $('.btn-image').click(function() {
+    $('.input-file').click();
+  });
+
+  $('.input-file').on('change', function(){
+    if ($('.btn-image').hasClass('disabled')) { return false; }
+    $('.btn-image').addClass('disabled');
+    var selectedFile = this.files[0];
+    var text = $('.btn-image').html();
+    $('.btn-image').html('. . .');
+    getImage(selectedFile, function(base64){
+      $('.btn-image').html(text);
+      $('.btn-image').removeClass('disabled');
+      inputBase64 = base64;
+    });
+  });
+
+  $('.btn-post').click(function(){
+    var nameExists = $('.input-name').val();
+    if (!nameExists) {
+      $('.input-name').siblings('label').addClass('required');
+    } else {
+      $('.input-name').siblings('label').removeClass('required');
+    }
+
+    var messageExists = $('.input-message').val();
+    if (!messageExists) {
+      $('.input-message').siblings('label').addClass('required');
+    } else {
+      $('.input-message').siblings('label').removeClass('required');
+    }
+
+    if (!nameExists || !messageExists) return;
+    console.log({
+      'title': $('.input-name').val(),
+      'detail': $('.input-message').val(),
+      'affiliation': $('.input-affiliation').val(),
+      'image': inputBase64
+    });
+    getWellSoonService.sendMessage(
+      {
+        'title': $('.input-name').val(),
+        'detail': $('.input-message').val(),
+        'affiliation': $('.input-affiliation').val(),
+        'image': inputBase64
+      }, function(data){
+        hideLightbox();
+      });
+  });
+
+  $('.btn-close').click(function(){
+    hideLightbox();
+  });
 
   function statusChangeCallback(response) {
     // The response object is returned with a status field that lets the
