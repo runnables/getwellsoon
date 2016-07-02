@@ -218,7 +218,7 @@ $(document).ready(function(){
       imageClass: message.imagePath ? 'block' : 'none',
       imageSrc: message.imagePath,
       detail: message.detail,
-      name: ((message.user || {}).name || '').split(' ')[0],
+      name: message.title,
       affiliation: message.affiliation,
       profileImage: (message.user || {}).profileImage
     }).children();
