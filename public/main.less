@@ -26,6 +26,10 @@ body {
   background-color: #fff;
   font-family: 'Mitr', sans-serif;
   @media(max-width: @breakpointS) { padding-bottom: 50px; }
+  textarea, input:not([type=checkbox]):not([type=radio]) {
+    outline: 0px;
+    -webkit-appearance: none;
+  }
 }
 .container {
   max-width: @breakpointL;
@@ -218,6 +222,7 @@ body {
         outline-color: @color-pink;
         .border-radius(4px);
         font-family: 'Mitr', sans-serif;
+        padding: 0;
       }
       input[type="text"] { height: 36px; }
       textarea { height: 90px; resize: none; padding-top: 10px; padding-bottom: 10px; }
