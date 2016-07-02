@@ -242,7 +242,7 @@ $(document).ready(function(){
   function getImage(file, callback) {
     file.reader = new FileReader();
     file.reader.readAsDataURL(file);
-    file.reader.onload = encode => {
+    file.reader.onload = function(encode) {
       file.img = new Image();
       file.img.src = encode.target.result;
       file.canvas = document.createElement('canvas');
