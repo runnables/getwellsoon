@@ -44,21 +44,6 @@ $(document).ready(function(){
 
     for (var i = 0; i < thumbnails.length; i++) {
       var map = textureLoader.load(thumbnails[i]);
-
-      var particle = new THREE.Sprite(new THREE.SpriteMaterial({ map: map, color: 0xffffff, fog: true }));
-      particle.position.x = Math.random() * 800 - 400;
-      particle.position.y = Math.random() * 800 - 400;
-      particle.position.z = Math.random() * 800 - 400;
-      particle.scale.x = particle.scale.y = Math.random() * 40 + 40;
-      scene.add(particle);
-
-      var particle = new THREE.Sprite(new THREE.SpriteMaterial({ map: map, color: 0xffffff, fog: true }));
-      particle.position.x = Math.random() * 800 - 400;
-      particle.position.y = Math.random() * 800 - 400;
-      particle.position.z = Math.random() * 800 - 400;
-      particle.scale.x = particle.scale.y = Math.random() * 40 + 40;
-      scene.add(particle);
-
       var particle = new THREE.Sprite(new THREE.SpriteMaterial({ map: map, color: 0xffffff, fog: true }));
       particle.position.x = Math.random() * 800 - 400;
       particle.position.y = Math.random() * 800 - 400;
