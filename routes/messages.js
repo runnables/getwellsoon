@@ -84,7 +84,6 @@ router.post('/', (req, res) => {
         });
     }
     return message.save()
-      .then(() => Message.populate(message, { path: 'user' }))
       .then(message => {
         message.user = req.currentUser;
         res.status(200).send(message);
