@@ -304,6 +304,7 @@ $(document).ready(function(){
   };
 
   function showLightbox() {
+    $('.btn-participate').addClass('hidden');
     $('.lightbox-participate').css('display', 'table');
     $('body').css('position', 'fixed');
     $('body').css('top', '0px');
@@ -313,6 +314,7 @@ $(document).ready(function(){
   }
 
   function hideLightbox() {
+    $('.btn-participate').removeClass('hidden');
     $('.lightbox-participate').css('display', 'none');
     $('body').removeAttr('style');
   }
@@ -467,7 +469,7 @@ $(document).ready(function(){
     });
     var msnry = new Masonry( '.grid', { itemSelector: '.grid-item' });
   }
-  
+
 
   // Initialization Code
     // Load the SDK asynchronously
