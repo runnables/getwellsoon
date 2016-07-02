@@ -75,9 +75,10 @@ router.post('/', (req, res) => {
           message.imagePath = `/media/messages/${message._id}.jpg`;
           return message.save();
         })
-        .then(() => (
-          res.status(200).send(message)
-        ))
+        .then(() => {
+          message.user = req.currentUser;
+          return res.status(200).send(message);
+        })
         .catch(err => {
           console.log('image err', err);
           res.status(500).send(err);
