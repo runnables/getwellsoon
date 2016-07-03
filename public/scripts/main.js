@@ -147,12 +147,12 @@ $(document).ready(function(){
         file.canvas.width = this.width;
         file.canvas.height = this.height;
 
-        if (file.canvas.width > 1280) {
-          file.canvas.width = 1280;
-          file.canvas.height = file.img.height / (file.img.width / 1280);
-        } else if (file.canvas.height > 1280) {
-          file.canvas.width = file.img.width / (file.img.height / 1280);
-          file.canvas.height = 1280;
+        if (file.canvas.width > 800) {
+          file.canvas.width = 800;
+          file.canvas.height = file.img.height / (file.img.width / 800);
+        } else if (file.canvas.height > 800) {
+          file.canvas.width = file.img.width / (file.img.height / 800);
+          file.canvas.height = 800;
         }
 
 
